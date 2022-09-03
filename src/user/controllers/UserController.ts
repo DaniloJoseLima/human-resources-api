@@ -12,11 +12,13 @@ export class UserController {
 	}
 
 	async login(req: Request, res: Response) {
-		const { email, password } = req.body
-
-		const userLogin = await UserService.login(email, password)
-
-		return res.json(userLogin)
+		const { email, password } = req.body		
+    try {
+      const userLogin = await UserService.login(email, password)
+		  return res.json(userLogin)
+    } catch (error: any) {
+      return res.status(500).json({message: error.message})
+    }
 	}
 
   //TODO: Temporário para receber Bearer Token

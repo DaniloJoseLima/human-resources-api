@@ -34,13 +34,13 @@ export const UserService = {
 		const user = await userRepository.findOneBy({ email })
 
 		if (!user) {
-			return  new BadRequestError('E-mail ou senha inválidos')
+			throw new BadRequestError('account not exist')
 		}
 
 		const verifyPass = await bcrypt.compare(password, user.password)
 
 		if (!verifyPass) {
-			throw new BadRequestError('E-mail ou senha inválidos')
+			throw new BadRequestError('invalid password')
 		}
 
 		const token = jwt.sign({ id: user.id }, process.env.JWT_PASS ?? '', {
