@@ -95,6 +95,7 @@ CREATE TABLE documents (
   id BIGINT(20) NOT NULL,
   document_type_id BIGINT(20) NOT NULL,
   collaborator_id VARCHAR(255) NOT NULL,
+  document_number VARCHAR(60) NOT NULL,
   expedition_date DATETIME NOT NULL,
   expedition_uf VARCHAR(10) NULL,
   expedition_agency VARCHAR(50) NULL,

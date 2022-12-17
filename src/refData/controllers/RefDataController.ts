@@ -37,4 +37,31 @@ export class RefDataController {
       return res.status(500).json({message: error.message})
     }
   }
+
+  async getSchoolingTypes(req: Request, res: Response) {
+    try {
+      const types = await RefDataService.getSchoolingTypes()
+		  return res.json(types)
+    } catch (error: any) {
+      return res.status(500).json({message: error.message})
+    }
+  }
+  
+  async getContactTypes(req: Request, res: Response) {
+    try {
+      const types = await RefDataService.getContactTypes()
+		  return res.json(types)
+    } catch (error: any) {
+      return res.status(500).json({message: error.message})
+    }
+  }
+
+  async getDependentTypes(req: Request, res: Response) {
+    try {
+      const types = await RefDataService.getDependentTypes()
+		  return res.json(types)
+    } catch (error: any) {
+      return res.status(500).json({message: error.message})
+    }
+  }
 }

@@ -1,24 +1,39 @@
-import { DocumentsTypesRepository, EthnicityTypesRepository, GenderTypesRepository, MaritalStatusTypesRepository } from "../repositories/RefDataRepository"
+import { ContactTypesRepository, DependentTypesRepository, DocumentsTypesRepository, EthnicityTypesRepository, GenderTypesRepository, MaritalStatusTypesRepository, SchoolingTypesRepository } from "../repositories/RefDataRepository"
 
 export const RefDataService = {
 
   async getEthnicityTypes() {
-		const types = await EthnicityTypesRepository.find()
-		return types
-	},
-  
+    const types = await EthnicityTypesRepository.find()
+    return types
+  },
+
   async getMaritalStatusTypes() {
-		const types = await MaritalStatusTypesRepository.find()
-		return types
-	},
-  
+    const types = await MaritalStatusTypesRepository.find()
+    return types
+  },
+
   async getGenderTypes() {
-		const types = await GenderTypesRepository.find()
-		return types
-	},
-  
+    const types = await GenderTypesRepository.find()
+    return types
+  },
+
   async getDocumentsTypes() {
-		const types = await DocumentsTypesRepository.find()
-		return types
-	},
+    const types = await DocumentsTypesRepository.find()
+    return types
+  },
+
+  async getSchoolingTypes() {
+    const types = await SchoolingTypesRepository.find()
+    return types
+  },
+
+  async getContactTypes() {
+    const types = await ContactTypesRepository.find()
+    return types
+  },
+
+  async getDependentTypes() {
+    const types = await DependentTypesRepository.find()
+    return types
+  },
 }
