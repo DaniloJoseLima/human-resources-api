@@ -1,17 +1,39 @@
-import { AppDataSource } from '../../data-source'
-import { ContactTypes } from '../../shared/entities/ContactTypes'
-import { DependentTypes } from '../../shared/entities/DependentTypes'
-import { DocumentsTypes } from '../../shared/entities/DocumentsTypes'
+import { ContactTypesRepository, DependentTypesRepository, DocumentsTypesRepository, EthnicityTypesRepository, GenderTypesRepository, MaritalStatusTypesRepository, SchoolingTypesRepository } from "../dataSource/RefDataDataSource"
 
-import { EthnicityTypes } from '../../shared/entities/EthnicityTypes'
-import { GenderTypes } from '../../shared/entities/GenderTypes'
-import { MaritalStatusTypes } from '../../shared/entities/MaritalStatusTypes'
-import { SchoolingTypes } from '../../shared/entities/SchoolingTypes'
+export const RefDataRepository = {
 
-export const EthnicityTypesRepository = AppDataSource.getRepository(EthnicityTypes)
-export const MaritalStatusTypesRepository = AppDataSource.getRepository(MaritalStatusTypes)
-export const GenderTypesRepository = AppDataSource.getRepository(GenderTypes)
-export const DocumentsTypesRepository = AppDataSource.getRepository(DocumentsTypes)
-export const SchoolingTypesRepository = AppDataSource.getRepository(SchoolingTypes)
-export const ContactTypesRepository = AppDataSource.getRepository(ContactTypes)
-export const DependentTypesRepository = AppDataSource.getRepository(DependentTypes)
+  async getEthnicityTypes() {
+    const types = await EthnicityTypesRepository.find()
+    return types
+  },
+
+  async getMaritalStatusTypes() {
+    const types = await MaritalStatusTypesRepository.find()
+    return types
+  },
+
+  async getGenderTypes() {
+    const types = await GenderTypesRepository.find()
+    return types
+  },
+
+  async getDocumentsTypes() {
+    const types = await DocumentsTypesRepository.find({order: {name: 'ASC'}})
+    return types
+  },
+
+  async getSchoolingTypes() {
+    const types = await SchoolingTypesRepository.find()
+    return types
+  },
+
+  async getContactTypes() {
+    const types = await ContactTypesRepository.find()
+    return types
+  },
+
+  async getDependentTypes() {
+    const types = await DependentTypesRepository.find()
+    return types
+  },
+}
