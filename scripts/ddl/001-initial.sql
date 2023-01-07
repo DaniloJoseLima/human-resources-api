@@ -52,6 +52,7 @@ CREATE TABLE schooling_types (
 
 CREATE TABLE collaborators (
   id VARCHAR(255) NOT NULL,
+  type ENUM('pj', 'clt') NOT NULL,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL,
   birth_date DATETIME NOT NULL,

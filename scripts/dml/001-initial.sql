@@ -24,6 +24,8 @@ INSERT INTO `human_resources`.`documents_types` (`name`) VALUES ('CPF');
 INSERT INTO `human_resources`.`documents_types` (`name`) VALUES ('PIS');
 INSERT INTO `human_resources`.`documents_types` (`name`) VALUES ('Reservista');
 INSERT INTO `human_resources`.`documents_types` (`name`) VALUES ('Título de eleitor');
+INSERT INTO `human_resources`.`documents_types` (`name`) VALUES ('CNPJ');
+INSERT INTO `human_resources`.`documents_types` (`name`) VALUES ('CTPS');
 
 INSERT INTO `human_resources`.`gender_types` (`name`) VALUES ('Masculino');
 INSERT INTO `human_resources`.`gender_types` (`name`) VALUES ('Feminino');
