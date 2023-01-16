@@ -10,5 +10,7 @@ refDataRoutes.get('/documents-types', new RefDataController().getDocumentsTypes)
 refDataRoutes.get('/schooling-types', new RefDataController().getSchoolingTypes)
 refDataRoutes.get('/contact-types', new RefDataController().getContactTypes)
 refDataRoutes.get('/dependent-types', new RefDataController().getDependentTypes)
+refDataRoutes.get('/transport-types', new RefDataController().getTransportTypes)
+refDataRoutes.get('/transport-card-types', new RefDataController().getTransportCardTypes)
 
 export default refDataRoutes

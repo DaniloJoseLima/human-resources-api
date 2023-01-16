@@ -36,4 +36,14 @@ export const RefDataService = {
     const types = await RefDataRepository.getDependentTypes()
     return types
   },
+
+  async getTransportTypes() {
+    const types = await RefDataRepository.getTransportTypes()
+    return types
+  },
+
+  async getTransportCardTypes() {
+    const types = await RefDataRepository.getTransportCardTypes()
+    return types
+  },
 }

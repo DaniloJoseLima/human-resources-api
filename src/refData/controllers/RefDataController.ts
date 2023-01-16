@@ -64,4 +64,22 @@ export class RefDataController {
       return res.status(500).json({message: error.message})
     }
   }
+
+  async getTransportTypes(req: Request, res: Response) {
+    try {
+      const types = await RefDataService.getTransportTypes()
+		  return res.json(types)
+    } catch (error: any) {
+      return res.status(500).json({message: error.message})
+    }
+  }
+
+  async getTransportCardTypes(req: Request, res: Response) {
+    try {
+      const types = await RefDataService.getTransportCardTypes()
+		  return res.json(types)
+    } catch (error: any) {
+      return res.status(500).json({message: error.message})
+    }
+  }
 }

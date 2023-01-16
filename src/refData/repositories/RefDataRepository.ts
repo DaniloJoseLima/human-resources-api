@@ -1,4 +1,4 @@
-import { ContactTypesRepository, DependentTypesRepository, DocumentsTypesRepository, EthnicityTypesRepository, GenderTypesRepository, MaritalStatusTypesRepository, SchoolingTypesRepository } from "../dataSource/RefDataDataSource"
+import { ContactTypesRepository, DependentTypesRepository, DocumentsTypesRepository, EthnicityTypesRepository, GenderTypesRepository, MaritalStatusTypesRepository, SchoolingTypesRepository, TransportCardTypesRepository, TransportTypesRepository } from "../dataSource/RefDataDataSource"
 
 export const RefDataRepository = {
 
@@ -34,6 +34,16 @@ export const RefDataRepository = {
 
   async getDependentTypes() {
     const types = await DependentTypesRepository.find()
+    return types
+  },
+
+  async getTransportTypes() {
+    const types = await TransportTypesRepository.find()
+    return types
+  },
+
+  async getTransportCardTypes() {
+    const types = await TransportCardTypesRepository.find()
     return types
   },
 }
