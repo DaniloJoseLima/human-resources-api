@@ -6,6 +6,7 @@ import { errorMiddleware } from './shared/middlewares/error'
 import authRoutes from './auth/routers';
 import userRoutes from './user/routers';
 import refDataRoutes from './refData/routers';
+import collaboratorRoutes from './collaborator/routers';
 
 const cors = require("cors");
 const express = require("express");
@@ -27,6 +28,8 @@ AppDataSource.initialize().then(() => {
   app.use(`${baseAPI}/ref-data`, refDataRoutes)
   app.use(`${baseAPI}/auth`, authRoutes)
   app.use(`${baseAPI}/user`, userRoutes)
+
+  app.use(`${baseAPI}/collaborator`, collaboratorRoutes)
   
   app.listen(process.env.PORT, () => console.log("Server is running"));
 

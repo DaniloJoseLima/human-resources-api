@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm'
 export class GenderTypes {
 
   @PrimaryColumn()
-  id: string;
+  id: number;
 
   @Column({ type: "varchar",  length: 100})
   name: string;
