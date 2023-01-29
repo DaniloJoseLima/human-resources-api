@@ -3,16 +3,50 @@ import { BadRequestError } from '../../shared/helpers/api-erros'
 
 import { CollaboratorDataSource } from "../dataSource/CollaboratorDataSource"
 
-import { listCollaborator, listCollaboratorCount } from './queries/collaborator'
+import { listCollaborator, listCollaboratorCount, findCollaborator, registrationVerification } from './queries/collaborator'
 
 export const CollaboratorRepository = {
 
   async save(entity: Collaborator) {
     try {
-      const collaborator = CollaboratorDataSource.create(entity)
+      const entityRef = { 
+        ...entity ,
+        maritalStatusTypeId: entity.maritalStatus,
+        ethnicityTypeId: entity.ethnicity,
+        genderTypeId: entity.gender,
+      }
+      const collaborator = CollaboratorDataSource.create(entityRef)
       await CollaboratorDataSource.save(collaborator)
       return collaborator
     } catch (error) {
+      throw new BadRequestError('Erro ao salvar colaborador')
+    }
+  },
+
+  async update(entity: Collaborator) {
+    try {
+      let collaborator = await CollaboratorDataSource.findOne({
+        where: {
+          id: entity.id
+        }
+      }) as Collaborator
+      collaborator = {
+        ...collaborator,
+        name: entity.name,
+        email: entity.email,
+        birthDate: entity.birthDate,
+        motherName: entity.motherName,
+        fatherName: entity.fatherName,
+        nationality: entity.nationality,
+        naturalness: entity.naturalness,
+        maritalStatusTypeId: entity.maritalStatus,
+        ethnicityTypeId: entity.ethnicity,
+        genderTypeId: entity.gender,
+      }
+      const result = await CollaboratorDataSource.save(collaborator);
+      return result
+    } catch (error) {
+      console.log(error)
       throw new BadRequestError('Erro ao salvar colaborador')
     }
   },
@@ -29,12 +63,17 @@ export const CollaboratorRepository = {
   },
 
   async find(id: string) {
-    const data = await CollaboratorDataSource.findOne({
-      where: {
-        id: id
-      }
-    })
-    return data
+    const [data] = await Promise.all([
+      CollaboratorDataSource.query(findCollaborator(id)),
+    ])
+    return data[0]
+  },
+
+  async registrationVerification(id: string) {
+    const [data] = await Promise.all([
+      CollaboratorDataSource.query(registrationVerification(id)),
+    ])
+    return data[0]
   },
 
 }

@@ -10,9 +10,9 @@ export interface CollaboratorDto {
   naturalness: string;
   updatedAt: Date;
   createdAt: Date;
-  maritalStatus?: object;
-  ethnicityType?: object;
-  gender?: object;
-  contract?: object;
+  maritalStatus?: any;
+  ethnicity?: any;
+  gender?: any;
+  contract?: any;
 
 }

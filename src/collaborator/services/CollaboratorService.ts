@@ -12,6 +12,12 @@ export const CollaboratorService = {
 		return collaborator
 	},
 
+  async update(collaboratorDto: CollaboratorDto) {
+    const entity = CollaboratorMap.toEntity(collaboratorDto)
+		const collaborator = await CollaboratorRepository.update(entity)
+		return collaborator
+	},
+
   async list(field: string, q: string, pageNumber: number) {
 		let data = await CollaboratorRepository.list(field, q, pageNumber)
     data.list = data.list.map((entity: any) => {
@@ -21,7 +27,13 @@ export const CollaboratorService = {
 	},
   
   async find(id: string) {
-		const data = await CollaboratorRepository.find(id)
+		const data = await CollaboratorRepository.find(id) as any
+    const dto = CollaboratorMap.toDto(data)
+		return dto
+	},
+  
+  async registrationVerification(id: string) {
+		const data = await CollaboratorRepository.registrationVerification(id) as any
 		return data
 	},
 }

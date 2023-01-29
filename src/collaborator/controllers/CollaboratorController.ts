@@ -10,6 +10,12 @@ export class CollaboratorController {
 		return res.status(201).json(user)
 	}
 
+	async update(req: Request, res: Response) {
+    const collaboratorDto: CollaboratorDto = req.body as CollaboratorDto
+    const user = await CollaboratorService.update(collaboratorDto)
+		return res.status(201).json(user)
+	}
+  
   async list(req: Request, res: Response) {
     const { field, q, page } = req.query as { field: string, q: string, page: string }
     const pageNumber = page ? parseInt(page) - 1 : 0 as number;
@@ -21,5 +27,11 @@ export class CollaboratorController {
     const { id } = req.params
     const data = await CollaboratorService.find(id)
 		return res.status(201).json(data)
+	}
+
+  async registrationVerification(req: Request, res: Response) {
+    const { id } = req.params
+    const data = await CollaboratorService.registrationVerification(id)
+		return res.status(200).json(data)
 	}
 }

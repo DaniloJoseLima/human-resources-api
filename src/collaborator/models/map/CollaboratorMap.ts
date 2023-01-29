@@ -16,9 +16,9 @@ export class CollaboratorMap  {
       naturalness: collaboratorDto.naturalness,
       updated_at: collaboratorDto.updatedAt,
       created_at: collaboratorDto.createdAt,
-      maritalStatus: collaboratorDto.maritalStatus,
-      ethnicityType: collaboratorDto.ethnicityType,
-      gender: collaboratorDto.gender,
+      maritalStatus: collaboratorDto.maritalStatus.id,
+      ethnicity: collaboratorDto.ethnicity.id,
+      gender: collaboratorDto.gender.id,
       contract: collaboratorDto.contract
     }
   }
@@ -26,7 +26,7 @@ export class CollaboratorMap  {
   public static toDto(collaborator: Collaborator): CollaboratorDto {
 
     const maritalStatus = collaborator.maritalStatus ? JSON.parse(collaborator.maritalStatus) : undefined
-    const ethnicityType = collaborator.ethnicityType ? JSON.parse(collaborator.ethnicityType) : undefined
+    const ethnicity = collaborator.ethnicity ? JSON.parse(collaborator.ethnicity) : undefined
     const gender = collaborator.gender ? JSON.parse(collaborator.gender) : undefined
     const contract = collaborator.contract ? JSON.parse(collaborator.contract) : undefined
 
@@ -42,8 +42,8 @@ export class CollaboratorMap  {
       naturalness: collaborator.naturalness,
       updatedAt: collaborator.updated_at,
       createdAt: collaborator.created_at,
-      maritalStatus: maritalStatus.id,
-      ethnicityType: ethnicityType,
+      maritalStatus: maritalStatus,
+      ethnicity: ethnicity,
       gender: gender,
       contract: contract
     }

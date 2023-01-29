@@ -38,7 +38,7 @@ export class Collaborator extends BaseEntity {
   genderTypeId: number;
 
   maritalStatus?: any;
-  ethnicityType?: any;
+  ethnicity?: any;
   gender?: any;
   contract?: any;
 }
