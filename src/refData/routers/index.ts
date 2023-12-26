@@ -12,5 +12,6 @@ refDataRoutes.get('/contact-types', new RefDataController().getContactTypes)
 refDataRoutes.get('/dependent-types', new RefDataController().getDependentTypes)
 refDataRoutes.get('/transport-types', new RefDataController().getTransportTypes)
 refDataRoutes.get('/transport-card-types', new RefDataController().getTransportCardTypes)
+refDataRoutes.get('/roles', new RefDataController().getRoles)
 
 export default refDataRoutes

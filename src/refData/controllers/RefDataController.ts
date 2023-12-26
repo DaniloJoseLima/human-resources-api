@@ -82,4 +82,12 @@ export class RefDataController {
       return res.status(500).json({message: error.message})
     }
   }
+  async getRoles(req: Request, res: Response) {
+    try {
+      const roles = await RefDataService.getRoles()
+		  return res.json(roles)
+    } catch (error: any) {
+      return res.status(500).json({message: error.message})
+    }
+  }
 }

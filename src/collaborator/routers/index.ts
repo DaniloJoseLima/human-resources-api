@@ -4,7 +4,6 @@ import { CollaboratorController } from '../controllers/CollaboratorController'
 
 const collaboratorRoutes = Router()
 
-//collaboratorRoutes.post('', authMiddleware, new CollaboratorController().save)
 collaboratorRoutes.post('',authMiddleware, new CollaboratorController().save)
 collaboratorRoutes.put('',authMiddleware, new CollaboratorController().update)
 collaboratorRoutes.get('',authMiddleware, new CollaboratorController().list)

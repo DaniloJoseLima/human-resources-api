@@ -1,13 +1,54 @@
-CREATE SCHEMA ;
+CREATE SCHEMA human_resources;
+
+USE human_resources;
 
 CREATE TABLE users (
   id VARCHAR(255) NOT NULL,
+  role_id INT(11) NOT NULL DEFAULT 1,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL,
   password VARCHAR(200) NOT NULL,
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (id),
+  INDEX fk_users_roles_idx (role_id ASC),
+  CONSTRAINT fk_users_roles_idx
+    FOREIGN KEY (role_id)
+    REFERENCES roles (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE roles (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL,
+  description varchar(255) NOT NULL,
+  deprecated tinyint(1) NOT NULL DEFAULT '0',
+  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE permissions (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  name_key VARCHAR(45) NULL,
+  deprecated TINYINT(1) NOT NULL DEFAULT '0',
+  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (id));
+
+CREATE TABLE permissions_roles (
+  permissions_id int(11) NOT NULL,
+  role_id int(11) NOT NULL,
+  deprecated tinyint(1) NOT NULL DEFAULT '0',
+  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (permissions_id,role_id),
+  KEY fk_roles_idx (role_id),
+  CONSTRAINT fk_permissions FOREIGN KEY (permissions_id) REFERENCES permissions (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT fk_roles FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE ethnicity_types (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -107,7 +148,7 @@ CREATE TABLE collaborator_documents (
   document_type_id BIGINT(20) NOT NULL,
   collaborator_id VARCHAR(255) NOT NULL,
   document_number VARCHAR(60) NOT NULL,
-  expedition_date DEFAULT NULL,
+  expedition_date DATETIME(6) DEFAULT NULL,
   expedition_uf VARCHAR(10) NULL,
   expedition_agency VARCHAR(50) NULL,
   series VARCHAR(45) DEFAULT NULL,
@@ -199,7 +240,7 @@ CREATE TABLE collaborator_dependents (
   INDEX fk_dependents_collaborators (collaborator_id ASC),
   INDEX fk_dependents_dependent_types (dependent_type_id ASC),
   INDEX fk_dependents_gender_types (gender_type_id ASC),
-  INDEX fk_dependents_marital_status_types (marital_status_type_id ASC)
+  INDEX fk_dependents_marital_status_types (marital_status_type_id ASC),
   CONSTRAINT fk_dependents_collaborators
     FOREIGN KEY (collaborator_id)
     REFERENCES collaborators (id)

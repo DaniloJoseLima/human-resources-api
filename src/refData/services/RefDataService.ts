@@ -46,4 +46,9 @@ export const RefDataService = {
     const types = await RefDataRepository.getTransportCardTypes()
     return types
   },
+
+  async getRoles() {
+    const roles = await RefDataRepository.getRoles()
+    return roles
+  },
 }

@@ -23,7 +23,7 @@ export const authMiddleware = async (
 
     const { id } = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayload
 
-    const user = await UserRepository.findById(id)
+    const user = await UserRepository.find(id)
 
     if (!user) {
       throw new UnauthorizedError('Não autorizado')

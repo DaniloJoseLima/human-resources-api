@@ -6,7 +6,10 @@ const userRoutes = Router()
 
 userRoutes.post('/create', new UserController().create)
 
-//TODO: Temporário para receber Bearer Token
-userRoutes.get('/profile', authMiddleware, new UserController().getProfile)
+userRoutes.put('/', new UserController().update)
+
+userRoutes.get('', authMiddleware, new UserController().findAll)
+
+userRoutes.get('/:id', authMiddleware, new UserController().find)
 
 export default userRoutes

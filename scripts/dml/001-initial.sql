@@ -1,3 +1,25 @@
+INSERT INTO roles (id,name,description,deprecated) VALUES (1,'ROLE_BASIC_USER','Básico',0);
+INSERT INTO roles (id,name,description,deprecated) VALUES (2,'ROLE_ADMINISTRATOR','Administrador',0);
+INSERT INTO roles (id,name,description,deprecated) VALUES (3,'ROLE_OPERATOR','Operador',0);
+
+INSERT INTO permissions (name, name_key, deprecated) VALUES ('Menu - Dashboard', 'MENU_DASHBOARD', '0');
+INSERT INTO permissions (name, name_key, deprecated) VALUES ('Menu - Colaboradores', 'MENU_COLLABORATORS', '0');
+INSERT INTO permissions (name, name_key, deprecated) VALUES ('Menu - Colaboradores/Listar', 'MENU_COLLABORATORS_LIST', '0');
+INSERT INTO permissions (name, name_key, deprecated) VALUES ('Menu - Configurações', 'MENU_SETTINGS', '0');
+INSERT INTO permissions (name, name_key, deprecated) VALUES ('Menu - Configurações/Usuários', 'MENU_SETTINGS_USERS', '0');
+
+
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('1', '1', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('1', '2', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('2', '2', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('3', '2', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('4', '2', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('5', '2', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('1', '3', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('2', '3', '0');
+INSERT INTO permissions_roles (permissions_id, role_id, deprecated) VALUES ('3', '3', '0');
+
+
 INSERT INTO dependent_types (name) VALUES ('Cônjuge');
 INSERT INTO dependent_types (name) VALUES ('Filho');
 INSERT INTO dependent_types (name) VALUES ('Enteado');

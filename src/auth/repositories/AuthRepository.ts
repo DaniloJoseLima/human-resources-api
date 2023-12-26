@@ -3,13 +3,15 @@ import jwt from 'jsonwebtoken'
 import { BadRequestError } from '../../shared/helpers/api-erros';
 
 import { AuthDataSource } from '../dataSource/AuthDataSource';
+import { findById } from './queries/user';
 
 export const AuthRepository = {
 
   async login(email: string, password: string) {
 
-    const user = await AuthDataSource.findOneBy({ email })
-
+    const [data] = await Promise.all([await AuthDataSource.query(findById(email))])
+    const user = data[0]
+    
     if (!user) {
       throw new BadRequestError('account not exist')
     }
