@@ -11,8 +11,8 @@ export class UserMap  {
       roleId: userDto.roles && userDto.roles.id ? userDto.roles.id : userDto.roleId,
       email: userDto.email,
       password: "",
-      created_at: new Date(),
-      updated_at: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
   }
 

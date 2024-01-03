@@ -144,7 +144,7 @@ CREATE TABLE collaborators (
     ON UPDATE NO ACTION);
 
 CREATE TABLE collaborator_documents (
-  id BIGINT(20) NOT NULL,
+  id BIGINT(20) NOT NULL AUTO_INCREMENT,
   document_type_id BIGINT(20) NOT NULL,
   collaborator_id VARCHAR(255) NOT NULL,
   document_number VARCHAR(60) NOT NULL,
@@ -172,7 +172,7 @@ CREATE TABLE collaborator_documents (
     ON UPDATE NO ACTION);
 
 CREATE TABLE collaborator_contacts (
-  id BIGINT(20) NOT NULL,
+  id BIGINT(20) NOT NULL AUTO_INCREMENT,
   collaborator_id VARCHAR(255) NOT NULL,
   contact_type_id BIGINT(20) NOT NULL,
   phone_number VARCHAR(45) NOT NULL,
@@ -193,10 +193,10 @@ CREATE TABLE collaborator_contacts (
     ON UPDATE NO ACTION);
 
 CREATE TABLE collaborator_addresses (
-  id BIGINT(20) NOT NULL,
+  id BIGINT(20) NOT NULL AUTO_INCREMENT,
   collaborator_id VARCHAR(255) NOT NULL,
   address_type_id BIGINT(20) NOT NULL,
-  zip_code VARCHAR(8) NOT NULL,
+  zip_code VARCHAR(20) NOT NULL,
   place VARCHAR(255) NOT NULL,
   number VARCHAR(20) NOT NULL,
   complement VARCHAR(100) NULL DEFAULT NULL,
@@ -338,7 +338,7 @@ CREATE TABLE collaborator_certification (
   ON UPDATE NO ACTION);
 
 CREATE TABLE collaborator_transport (
-  id BIGINT(20) NOT NULL,
+  id BIGINT(20) NOT NULL AUTO_INCREMENT,
   collaborator_id VARCHAR(255) NOT NULL,
   type ENUM('going', 'round') NOT NULL,
   transport_type_id BIGINT(20) NOT NULL,
@@ -370,7 +370,7 @@ CREATE TABLE collaborator_transport (
     ON UPDATE NO ACTION);
 
 CREATE TABLE collaborator_company_data (
-  id BIGINT(20) NOT NULL,
+  id BIGINT(20) NOT NULL AUTO_INCREMENT,
   collaborator_id VARCHAR(255) NOT NULL,
   corporate_name VARCHAR(100) NOT NULL,
   fantasy_name VARCHAR(100) NOT NULL,

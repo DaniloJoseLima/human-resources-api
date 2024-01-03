@@ -11,8 +11,8 @@ export class UserMap  {
       roleId: userDto.roleId,
       email: userDto.email,
       password: "",
-      created_at: new Date(),
-      updated_at: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
   }
 

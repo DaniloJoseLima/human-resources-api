@@ -32,16 +32,7 @@ export const CollaboratorRepository = {
       }) as Collaborator
       collaborator = {
         ...collaborator,
-        name: entity.name,
-        email: entity.email,
-        birthDate: entity.birthDate,
-        motherName: entity.motherName,
-        fatherName: entity.fatherName,
-        nationality: entity.nationality,
-        naturalness: entity.naturalness,
-        maritalStatusTypeId: entity.maritalStatus,
-        ethnicityTypeId: entity.ethnicity,
-        genderTypeId: entity.gender,
+        ...entity,
       }
       const result = await CollaboratorDataSource.save(collaborator);
       return result
