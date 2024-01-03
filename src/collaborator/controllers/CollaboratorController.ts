@@ -67,6 +67,12 @@ export class CollaboratorController {
     return res.status(201).json(user)
   }
 
+  async updateAddress(req: Request, res: Response) {
+    const collaboratorAddressDto: CollaboratorAddressDto = req.body as CollaboratorAddressDto
+    const user = await CollaboratorService.updateAddress(collaboratorAddressDto)
+    return res.status(201).json(user)
+  }
+
   async findAddress(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.findAddress(id)

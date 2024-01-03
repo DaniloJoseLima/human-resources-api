@@ -102,11 +102,17 @@ export const CollaboratorService = {
 
   async saveAddress(collaboratorAddressDto: CollaboratorAddressDto) {
     if (collaboratorAddressDto) {
-      const collaboratorAddress = CollaboratorAddressMap.toEntity(collaboratorAddressDto)
-      const collaborator = await CollaboratorAddressRepository.save(collaboratorAddress)
+      const entity = CollaboratorAddressMap.toEntity(collaboratorAddressDto)
+      const collaborator = await CollaboratorAddressRepository.save(entity)
       return collaborator
     }
     throw new BadRequestError('invalid form')
+  },
+
+  async updateAddress(collaboratorAddressDto: CollaboratorAddressDto) {
+    const entity = CollaboratorAddressMap.toEntity(collaboratorAddressDto)
+    const collaborator = await CollaboratorAddressRepository.update(entity)
+    return collaborator
   },
 
   async findAddress(collaboratorId: string) {

@@ -17,6 +17,7 @@ collaboratorRoutes.post('/contacts',authMiddleware, new CollaboratorController()
 collaboratorRoutes.get('/:id/contacts',authMiddleware, new CollaboratorController().findContacts)
 
 collaboratorRoutes.post('/address',authMiddleware, new CollaboratorController().saveAddress)
+collaboratorRoutes.put('/address',authMiddleware, new CollaboratorController().updateAddress)
 collaboratorRoutes.get('/:id/address',authMiddleware, new CollaboratorController().findAddress)
 
 export default collaboratorRoutes
