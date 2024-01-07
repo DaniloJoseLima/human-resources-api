@@ -1,3 +1,4 @@
+import { CollaboratorDependentsDto } from './../models/dto/CollaboratorDependentsDto';
 import { CollaboratorAddressDto } from './../models/dto/CollaboratorAddressDto';
 import { CollaboratorDocumentDto } from './../models/dto/CollaboratorDocumentDto';
 
@@ -14,6 +15,9 @@ import { CollaboratorContactsRepository } from '../repositories/CollaboratorCont
 import { CollaboratorAddressMap } from '../models/map/CollaboratorAddressMap';
 import { CollaboratorAddressRepository } from '../repositories/CollaboratorAddressRepository';
 import { BadRequestError } from '../../shared/helpers/api-erros';
+import { CollaboratorDependentMap } from '../models/map/CollaboratorDependentMap';
+import { CollaboratorDependents } from '../../shared/entities/CollaboratorDependents';
+import { CollaboratorDependentsRepository } from '../repositories/CollaboratorDependentsRepository';
 
 export const CollaboratorService = {
 
@@ -48,16 +52,32 @@ export const CollaboratorService = {
     return data
   },
 
-  async saveDocuments(collaboratorDto: CollaboratorDto) {
-    if (collaboratorDto.document) {
-      const collaboratorDocument = collaboratorDto.document.map((entity) => {
+  async saveDocuments(dto: CollaboratorDto) {
+    if (dto.document) {
+      const collaboratorDocument = dto.document.map((entity) => {
         const collaboratorDocuments = CollaboratorDocumentMap.toEntity(entity)
         return collaboratorDocuments
       }) as CollaboratorDocuments[]
 
-      this.deleteDocuments(collaboratorDto)
+      this.deleteDocuments(dto)
       const collaborator = await CollaboratorDocumentRepository.save(collaboratorDocument)
       return collaborator
+    }
+    return null
+  },
+
+  async updateDocuments(dto: CollaboratorDto) {
+    if (dto.document) {
+      const entity = dto.document.map((data) => {
+        const collaboratorDocuments = CollaboratorDocumentMap.toEntity(data)
+        return collaboratorDocuments
+      }) as CollaboratorDocuments[]
+
+      this.deleteDocuments(dto)
+      entity.map( async (data) => {
+        await CollaboratorDocumentRepository.update(data)
+      })
+      return entity
     }
     return null
   },
@@ -70,7 +90,14 @@ export const CollaboratorService = {
   async deleteDocuments(collaboratorDto: CollaboratorDto) {
     const documents = await this.findDocuments(collaboratorDto.id)
     for (let index = 0; index < documents.length; index++) {
-      CollaboratorDocumentRepository.delete(documents[index].id)
+      if(collaboratorDto.document && collaboratorDto.document.length > 0) {
+        const validContact = collaboratorDto.document.find( c => c.id == documents[index].id) 
+        if(!validContact) {
+          CollaboratorDocumentRepository.delete(documents[index].id)
+        }
+      } else {
+        CollaboratorDocumentRepository.delete(documents[index].id)
+      }
     }
   },
 
@@ -88,6 +115,22 @@ export const CollaboratorService = {
     return null
   },
 
+  async updateContacts(collaboratorDto: CollaboratorDto) {
+    if (collaboratorDto.contacts) {
+      const entity = collaboratorDto.contacts.map((data) => {
+        const collaboratorContacts = CollaboratorContactMap.toEntity(data)
+        return collaboratorContacts
+      }) as CollaboratorContacts[]
+
+      this.deleteContacts(collaboratorDto)
+      entity.map( async (data) => {
+        await CollaboratorContactsRepository.update(data)
+      })
+      return entity
+    }
+    return null
+  },
+
   async findContacts(collaboratorId: string) {
     const contacts = await CollaboratorContactsRepository.find(collaboratorId)
     return contacts
@@ -96,7 +139,14 @@ export const CollaboratorService = {
   async deleteContacts(collaboratorDto: CollaboratorDto) {
     const contacts = await this.findContacts(collaboratorDto.id)
     for (let index = 0; index < contacts.length; index++) {
-      CollaboratorDocumentRepository.delete(contacts[index].id)
+      if(collaboratorDto.contacts && collaboratorDto.contacts.length > 0) {
+        const validContact = collaboratorDto.contacts.find( c => c.id == contacts[index].id) 
+        if(!validContact) {
+          CollaboratorContactsRepository.delete(contacts[index].id)
+        }
+      } else {
+        CollaboratorContactsRepository.delete(contacts[index].id)
+      }
     }
   },
 
@@ -118,5 +168,48 @@ export const CollaboratorService = {
   async findAddress(collaboratorId: string) {
     const contacts = await CollaboratorAddressRepository.find(collaboratorId)
     return contacts
+  },
+
+  async saveDependents(dto: CollaboratorDependentsDto[]) {
+    if (dto) {
+      let collaboratorDtoId = dto[0].collaboratorId
+      const entity = dto.map((data) => {
+        const collaboratorContacts = CollaboratorDependentMap.toEntity(data)
+        return collaboratorContacts
+      }) as CollaboratorDependents[]
+
+      this.deleteDependents(collaboratorDtoId)
+      const collaborator = await CollaboratorDependentsRepository.save(entity)
+      return collaborator
+    }
+    return null
+  },
+
+  async updateDependents(dto: CollaboratorDependentsDto[]) {
+    if (dto) {
+      let collaboratorDtoId = dto[0].collaboratorId
+      const entity = dto.map((data) => {
+        const collaboratorContacts = CollaboratorDependentMap.toEntity(data)
+        return collaboratorContacts
+      }) as CollaboratorDependents[]
+
+      entity.map(async (value) => {
+        await CollaboratorDependentsRepository.update(value)
+      })
+      return this.findDependents(collaboratorDtoId)
+    }
+    return null
+  },
+
+  async findDependents(collaboratorId: string) {
+    const entity = await CollaboratorDependentsRepository.find(collaboratorId)
+    return entity
+  },
+
+  async deleteDependents(id: string) {
+    const dependents = await this.findDependents(id)
+    for (let index = 0; index < dependents.length; index++) {
+      CollaboratorDependentsRepository.delete(dependents[index].id)
+    }
   },
 }

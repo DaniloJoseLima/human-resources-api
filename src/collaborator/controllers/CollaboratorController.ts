@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import { CollaboratorDto } from '../models/dto/CollaboratorDto'
 import { CollaboratorService } from '../services/CollaboratorService'
 import { CollaboratorAddressDto } from '../models/dto/CollaboratorAddressDto';
+import { CollaboratorDependentsDto } from '../models/dto/CollaboratorDependentsDto';
 
 export class CollaboratorController {
 
@@ -43,6 +44,12 @@ export class CollaboratorController {
     return res.status(201).json(user)
   }
 
+  async updateDocuments(req: Request, res: Response) {
+    const collaboratorDto: CollaboratorDto = req.body as CollaboratorDto
+    const user = await CollaboratorService.updateDocuments(collaboratorDto)
+    return res.status(201).json(user)
+  }
+
   async findDocuments(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.findDocuments(id)
@@ -50,9 +57,15 @@ export class CollaboratorController {
   }
 
   async saveContacts(req: Request, res: Response) {
-    const collaboratorDto: CollaboratorDto = req.body as CollaboratorDto
-    const user = await CollaboratorService.saveContacts(collaboratorDto)
-    return res.status(201).json(user)
+    const dto: CollaboratorDto = req.body as CollaboratorDto
+    const entity = await CollaboratorService.saveContacts(dto)
+    return res.status(201).json(entity)
+  }
+  
+  async updateContacts(req: Request, res: Response) {
+    const dto: CollaboratorDto = req.body as CollaboratorDto
+    const entity = await CollaboratorService.updateContacts(dto)
+    return res.status(201).json(entity)
   }
 
   async findContacts(req: Request, res: Response) {
@@ -76,6 +89,25 @@ export class CollaboratorController {
   async findAddress(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.findAddress(id)
+    return res.status(200).json(data)
+  }
+  
+
+  async saveDependents(req: Request, res: Response) {
+    const dto: CollaboratorDependentsDto[] = req.body as CollaboratorDependentsDto[]
+    const data = await CollaboratorService.saveDependents(dto)
+    return res.status(201).json(data)
+  }
+
+  async updateDependents(req: Request, res: Response) {
+    const dto: CollaboratorDependentsDto[] = req.body as CollaboratorDependentsDto[]
+    const data = await CollaboratorService.updateDependents(dto)
+    return res.status(201).json(data)
+  }
+
+  async findDependents(req: Request, res: Response) {
+    const { id } = req.params
+    const data = await CollaboratorService.findDependents(id)
     return res.status(200).json(data)
   }
 }

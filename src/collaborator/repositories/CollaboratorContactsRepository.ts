@@ -15,6 +15,24 @@ export const CollaboratorContactsRepository = {
     }
   },
 
+  async update(entity: CollaboratorContacts) {
+    try {
+      let collaborator = await CollaboratorContactsDataSource.findOne({
+        where: {
+          id: entity.id
+        }
+      }) as CollaboratorContacts
+      collaborator = {
+        ...collaborator,
+        ...entity,
+      }
+      const result = await CollaboratorContactsDataSource.save(collaborator);
+      return result
+    } catch (error) {
+      throw new BadRequestError('Error update')
+    }
+  },
+
   async find(collaboratorId: string) {
     let collaboratorContacts = await CollaboratorContactsDataSource.find({
       where: {

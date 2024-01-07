@@ -16,6 +16,24 @@ export const CollaboratorDocumentRepository = {
     }
   },
 
+  async update(entity: CollaboratorDocuments) {
+    try {
+      let collaborator = await CollaboratorDocumentDataSource.findOne({
+        where: {
+          id: entity.id
+        }
+      }) as CollaboratorDocuments
+      collaborator = {
+        ...collaborator,
+        ...entity,
+      }
+      const result = await CollaboratorDocumentDataSource.save(collaborator);
+      return result
+    } catch (error) {
+      throw new BadRequestError('Error update')
+    }
+  },
+
   async find(collaboratorId: string) {
     let collaboratorDocuments = await CollaboratorDocumentDataSource.find({
       where: {

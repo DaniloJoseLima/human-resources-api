@@ -233,7 +233,7 @@ CREATE TABLE collaborator_dependents (
   expedition_date DATETIME NULL DEFAULT NULl,
   expedition_uf VARCHAR(10) NULL DEFAULT NULL,
   expedition_agency VARCHAR(50) NULL DEFAULT NULL,
-  irrf_dependent TINYINT(1) NULL DEFAULT 0,
+  irpf_dependent TINYINT(1) NULL DEFAULT 0,
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   PRIMARY KEY (id),
@@ -262,22 +262,22 @@ CREATE TABLE collaborator_dependents (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-
 CREATE TABLE collaborator_bank_data (
-  id BIGINT(20) NOT NULL AUTO_INCREMENT,
-  collaborator_id VARCHAR(255) NOT NULL,
-  name VARCHAR(50) NOT NULL,
-  agency BIGINT(20) NOT NULL,
-  account BIGINT(20) NOT NULL,
-  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  collaborator_id varchar(255) NOT NULL,
+  name varchar(50) NOT NULL,
+  agency bigint(20) NOT NULL,
+  account bigint(20) NOT NULL,
+  account_type enum('savings','current') NOT NULL,
+  account_category enum('pj','pf') NOT NULL,
+  pix_key_type enum('telephone', 'email', 'cpf', 'cnpj', 'random') DEFAULT NULL,
+  pix_key varchar(250) DEFAULT NULL,
+  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   PRIMARY KEY (id),
-  INDEX fk_bank_data_collaborators (collaborator_id ASC),
-  CONSTRAINT fk_bank_data_collaborators
-    FOREIGN KEY (collaborator_id)
-    REFERENCES collaborators (id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+  KEY fk_bank_data_collaborators (collaborator_id),
+  CONSTRAINT fk_bank_data_collaborators FOREIGN KEY (collaborator_id) REFERENCES collaborators (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE collaborator_contract_data (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
