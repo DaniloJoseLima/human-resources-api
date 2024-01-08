@@ -26,4 +26,8 @@ collaboratorRoutes.post('/dependents',authMiddleware, new CollaboratorController
 collaboratorRoutes.put('/dependents',authMiddleware, new CollaboratorController().updateDependents)
 collaboratorRoutes.get('/:id/dependents',authMiddleware, new CollaboratorController().findDependents)
 
+collaboratorRoutes.post('/bank-data',authMiddleware, new CollaboratorController().saveBanckData)
+collaboratorRoutes.put('/bank-data',authMiddleware, new CollaboratorController().updateBanckData)
+collaboratorRoutes.get('/:id/bank-data',authMiddleware, new CollaboratorController().findBanckData)
+
 export default collaboratorRoutes

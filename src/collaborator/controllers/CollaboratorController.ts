@@ -4,6 +4,7 @@ import { CollaboratorDto } from '../models/dto/CollaboratorDto'
 import { CollaboratorService } from '../services/CollaboratorService'
 import { CollaboratorAddressDto } from '../models/dto/CollaboratorAddressDto';
 import { CollaboratorDependentsDto } from '../models/dto/CollaboratorDependentsDto';
+import { CollaboratorBankDataDto } from '../models/dto/CollaboratorBankDataDto';
 
 export class CollaboratorController {
 
@@ -108,6 +109,25 @@ export class CollaboratorController {
   async findDependents(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.findDependents(id)
+    return res.status(200).json(data)
+  }
+  
+
+  async saveBanckData(req: Request, res: Response) {
+    const dto: CollaboratorBankDataDto = req.body as CollaboratorBankDataDto
+    const data = await CollaboratorService.saveBanckData(dto)
+    return res.status(201).json(data)
+  }
+
+  async updateBanckData(req: Request, res: Response) {
+    const dto: CollaboratorBankDataDto = req.body as CollaboratorBankDataDto
+    const data = await CollaboratorService.updateBanckData(dto)
+    return res.status(201).json(data)
+  }
+
+  async findBanckData(req: Request, res: Response) {
+    const { id } = req.params
+    const data = await CollaboratorService.findBanckData(id)
     return res.status(200).json(data)
   }
 }

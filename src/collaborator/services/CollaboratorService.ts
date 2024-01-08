@@ -1,3 +1,4 @@
+import { CollaboratorBankDataDto } from './../models/dto/CollaboratorBankDataDto';
 import { CollaboratorDependentsDto } from './../models/dto/CollaboratorDependentsDto';
 import { CollaboratorAddressDto } from './../models/dto/CollaboratorAddressDto';
 import { CollaboratorDocumentDto } from './../models/dto/CollaboratorDocumentDto';
@@ -18,6 +19,9 @@ import { BadRequestError } from '../../shared/helpers/api-erros';
 import { CollaboratorDependentMap } from '../models/map/CollaboratorDependentMap';
 import { CollaboratorDependents } from '../../shared/entities/CollaboratorDependents';
 import { CollaboratorDependentsRepository } from '../repositories/CollaboratorDependentsRepository';
+import { CollaboratorBankDataMap } from '../models/map/CollaboratorBankDataMap';
+import { CollaboratorBankData } from '../../shared/entities/CollaboratorBankData';
+import { CollaboratorBankDataRepository } from '../repositories/CollaboratorBankDataRepository';
 
 export const CollaboratorService = {
 
@@ -74,7 +78,7 @@ export const CollaboratorService = {
       }) as CollaboratorDocuments[]
 
       this.deleteDocuments(dto)
-      entity.map( async (data) => {
+      entity.map(async (data) => {
         await CollaboratorDocumentRepository.update(data)
       })
       return entity
@@ -90,9 +94,9 @@ export const CollaboratorService = {
   async deleteDocuments(collaboratorDto: CollaboratorDto) {
     const documents = await this.findDocuments(collaboratorDto.id)
     for (let index = 0; index < documents.length; index++) {
-      if(collaboratorDto.document && collaboratorDto.document.length > 0) {
-        const validContact = collaboratorDto.document.find( c => c.id == documents[index].id) 
-        if(!validContact) {
+      if (collaboratorDto.document && collaboratorDto.document.length > 0) {
+        const validContact = collaboratorDto.document.find(c => c.id == documents[index].id)
+        if (!validContact) {
           CollaboratorDocumentRepository.delete(documents[index].id)
         }
       } else {
@@ -123,7 +127,7 @@ export const CollaboratorService = {
       }) as CollaboratorContacts[]
 
       this.deleteContacts(collaboratorDto)
-      entity.map( async (data) => {
+      entity.map(async (data) => {
         await CollaboratorContactsRepository.update(data)
       })
       return entity
@@ -139,9 +143,9 @@ export const CollaboratorService = {
   async deleteContacts(collaboratorDto: CollaboratorDto) {
     const contacts = await this.findContacts(collaboratorDto.id)
     for (let index = 0; index < contacts.length; index++) {
-      if(collaboratorDto.contacts && collaboratorDto.contacts.length > 0) {
-        const validContact = collaboratorDto.contacts.find( c => c.id == contacts[index].id) 
-        if(!validContact) {
+      if (collaboratorDto.contacts && collaboratorDto.contacts.length > 0) {
+        const validContact = collaboratorDto.contacts.find(c => c.id == contacts[index].id)
+        if (!validContact) {
           CollaboratorContactsRepository.delete(contacts[index].id)
         }
       } else {
@@ -211,5 +215,22 @@ export const CollaboratorService = {
     for (let index = 0; index < dependents.length; index++) {
       CollaboratorDependentsRepository.delete(dependents[index].id)
     }
+  },
+
+  async saveBanckData(dto: CollaboratorBankDataDto) {
+    const entity = CollaboratorBankDataMap.toEntity(dto) as CollaboratorBankData
+    const collaborator = await CollaboratorBankDataRepository.save(entity)
+    return collaborator
+  },
+
+  async updateBanckData(dto: CollaboratorBankDataDto) {
+    const entity = CollaboratorBankDataMap.toEntity(dto) as CollaboratorBankData
+    const collaborator = await CollaboratorBankDataRepository.update(entity)
+    return collaborator
+  },
+
+  async findBanckData(collaboratorId: string) {
+    const entity = await CollaboratorBankDataRepository.find(collaboratorId)
+    return entity
   },
 }
