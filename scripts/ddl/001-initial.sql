@@ -298,26 +298,32 @@ CREATE TABLE collaborator_contract_data (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+CREATE TABLE collaborator_formation (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  collaborator_id varchar(255) NOT NULL,
+  schooling_type_id bigint(20) NOT NULL,
+  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (id),
+  KEY fk_formation_collaborators (collaborator_id),
+  KEY fk_formation_schooling_types (schooling_type_id),
+  CONSTRAINT fk_formation_collaborators FOREIGN KEY (collaborator_id) REFERENCES collaborators (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT fk_formation_schooling_types FOREIGN KEY (schooling_type_id) REFERENCES schooling_types (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE collaborator_academic_formation (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
   collaborator_id VARCHAR(255) NOT NULL,
-  schooling_type_id BIGINT(20) NOT NULL,
   course VARCHAR(50) NULL DEFAULT NULL,
-  institution VARCHAR(50) NULL DEFAULT NULL,
+  institution VARCHAR(150) NULL DEFAULT NULL,
   period VARCHAR(50) NULL DEFAULT NULL,
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   PRIMARY KEY (id),
   INDEX fk_academic_formation_collaborators (collaborator_id ASC),
-  INDEX fk_academic_formation_schooling_types (schooling_type_id ASC),
   CONSTRAINT fk_academic_formation_collaborators
     FOREIGN KEY (collaborator_id)
     REFERENCES collaborators (id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_academic_formation_schooling_types
-    FOREIGN KEY (schooling_type_id)
-    REFERENCES schooling_types (id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -340,9 +346,8 @@ CREATE TABLE collaborator_certification (
 CREATE TABLE collaborator_transport (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
   collaborator_id VARCHAR(255) NOT NULL,
-  type ENUM('going', 'round') NOT NULL,
+  type ENUM('going', 'return') NOT NULL,
   transport_type_id BIGINT(20) NOT NULL,
-  transport_card_type_id BIGINT(20) NOT NULL,
   company VARCHAR(45) NULL DEFAULT NULL,
   line VARCHAR(45) NULL DEFAULT NULL,
   quantity BIGINT(20) NULL DEFAULT NULL,
@@ -352,7 +357,6 @@ CREATE TABLE collaborator_transport (
   PRIMARY KEY (id),
   INDEX fk_collaborator_transport_collaborators (collaborator_id ASC),
   INDEX fk_collaborator_transport_transport_type (transport_type_id ASC),
-  INDEX fk_collaborator_transport_transport_card_type (transport_card_type_id ASC),
   CONSTRAINT fk_collaborator_transport_collaborators
     FOREIGN KEY (collaborator_id)
     REFERENCES collaborators (id)
@@ -362,12 +366,24 @@ CREATE TABLE collaborator_transport (
     FOREIGN KEY (transport_type_id)
     REFERENCES transport_types (id)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE collaborator_transport_cards_types (
+  collaborator_transport_id BIGINT(20) NOT NULL,
+  transport_cards_types_id BIGINT(20) NOT NULL,
+  PRIMARY KEY (collaborator_transport_id, transport_cards_types_id),
+  INDEX fk_transport_cards_types_id_idx (transport_cards_types_id ASC),
+  CONSTRAINT fk_collaborator_transport_id
+    FOREIGN KEY (collaborator_transport_id)
+    REFERENCES human_resources.collaborator_transport (id)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT fk_collaborator_transport_transport_card_type
-    FOREIGN KEY (transport_card_type_id)
-    REFERENCES transport_cards_types (id)
+  CONSTRAINT fk_transport_cards_types_id
+    FOREIGN KEY (transport_cards_types_id)
+    REFERENCES human_resources.transport_cards_types (id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
 
 CREATE TABLE collaborator_company_data (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,

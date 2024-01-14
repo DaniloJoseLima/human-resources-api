@@ -5,6 +5,8 @@ import { CollaboratorService } from '../services/CollaboratorService'
 import { CollaboratorAddressDto } from '../models/dto/CollaboratorAddressDto';
 import { CollaboratorDependentsDto } from '../models/dto/CollaboratorDependentsDto';
 import { CollaboratorBankDataDto } from '../models/dto/CollaboratorBankDataDto';
+import { CollaboratorContractDataDto } from '../models/dto/CollaboratorContractDataDto';
+import { CollaboratorProfessionalDataDto } from '../models/dto/CollaboratorProfessionalDataDto';
 
 export class CollaboratorController {
 
@@ -62,7 +64,7 @@ export class CollaboratorController {
     const entity = await CollaboratorService.saveContacts(dto)
     return res.status(201).json(entity)
   }
-  
+
   async updateContacts(req: Request, res: Response) {
     const dto: CollaboratorDto = req.body as CollaboratorDto
     const entity = await CollaboratorService.updateContacts(dto)
@@ -92,7 +94,6 @@ export class CollaboratorController {
     const data = await CollaboratorService.findAddress(id)
     return res.status(200).json(data)
   }
-  
 
   async saveDependents(req: Request, res: Response) {
     const dto: CollaboratorDependentsDto[] = req.body as CollaboratorDependentsDto[]
@@ -111,7 +112,6 @@ export class CollaboratorController {
     const data = await CollaboratorService.findDependents(id)
     return res.status(200).json(data)
   }
-  
 
   async saveBanckData(req: Request, res: Response) {
     const dto: CollaboratorBankDataDto = req.body as CollaboratorBankDataDto
@@ -128,6 +128,43 @@ export class CollaboratorController {
   async findBanckData(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.findBanckData(id)
+    return res.status(200).json(data)
+  }
+
+  async saveContractData(req: Request, res: Response) {
+    const dto: CollaboratorContractDataDto = req.body as CollaboratorContractDataDto
+    const data = await CollaboratorService.saveContractData(dto)
+    return res.status(201).json(data)
+  }
+
+  async updateContractData(req: Request, res: Response) {
+    const dto: CollaboratorContractDataDto = req.body as CollaboratorContractDataDto
+    const data = await CollaboratorService.updateContractData(dto)
+    return res.status(201).json(data)
+  }
+
+  async findContractData(req: Request, res: Response) {
+    const { id } = req.params
+    const data = await CollaboratorService.findContractData(id)
+    return res.status(200).json(data)
+  }
+  
+
+  async saveProfessionalData(req: Request, res: Response) {
+    const dto: CollaboratorProfessionalDataDto = req.body as CollaboratorProfessionalDataDto
+    const data = await CollaboratorService.saveProfessionalData(dto)
+    return res.status(201).json(data)
+  }
+
+  async updateProfessionalData(req: Request, res: Response) {
+    const dto: CollaboratorProfessionalDataDto = req.body as CollaboratorProfessionalDataDto
+    const data = await CollaboratorService.updateProfessionalData(dto)
+    return res.status(201).json(data)
+  }
+
+  async findProfessionalData(req: Request, res: Response) {
+    const { id } = req.params
+    const data = await CollaboratorService.findProfessionalData(id)
     return res.status(200).json(data)
   }
 }

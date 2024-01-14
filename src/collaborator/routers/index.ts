@@ -30,4 +30,13 @@ collaboratorRoutes.post('/bank-data',authMiddleware, new CollaboratorController(
 collaboratorRoutes.put('/bank-data',authMiddleware, new CollaboratorController().updateBanckData)
 collaboratorRoutes.get('/:id/bank-data',authMiddleware, new CollaboratorController().findBanckData)
 
+collaboratorRoutes.post('/contract-data',authMiddleware, new CollaboratorController().saveContractData)
+collaboratorRoutes.put('/contract-data',authMiddleware, new CollaboratorController().updateContractData)
+collaboratorRoutes.get('/:id/contract-data',authMiddleware, new CollaboratorController().findContractData)
+
+
+collaboratorRoutes.post('/professional-data',authMiddleware, new CollaboratorController().saveProfessionalData)
+collaboratorRoutes.put('/professional-data',authMiddleware, new CollaboratorController().updateProfessionalData)
+collaboratorRoutes.get('/:id/professional-data',authMiddleware, new CollaboratorController().findProfessionalData)
+
 export default collaboratorRoutes

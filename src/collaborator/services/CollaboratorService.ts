@@ -1,3 +1,5 @@
+import { CollaboratorProfessionalDataDto } from './../models/dto/CollaboratorProfessionalDataDto';
+import { CollaboratorContractDataDto } from './../models/dto/CollaboratorContractDataDto';
 import { CollaboratorBankDataDto } from './../models/dto/CollaboratorBankDataDto';
 import { CollaboratorDependentsDto } from './../models/dto/CollaboratorDependentsDto';
 import { CollaboratorAddressDto } from './../models/dto/CollaboratorAddressDto';
@@ -22,6 +24,17 @@ import { CollaboratorDependentsRepository } from '../repositories/CollaboratorDe
 import { CollaboratorBankDataMap } from '../models/map/CollaboratorBankDataMap';
 import { CollaboratorBankData } from '../../shared/entities/CollaboratorBankData';
 import { CollaboratorBankDataRepository } from '../repositories/CollaboratorBankDataRepository';
+import { CollaboratorContractDataMap } from '../models/map/CollaboratorContractDataMap';
+import { CollaboratorContractData } from '../../shared/entities/CollaboratorContractData';
+import { CollaboratorContractDataRepository } from '../repositories/CollaboratorContractDataRepository';
+import { CollaboratorFormationMap } from '../models/map/CollaboratorFormationMap';
+import { CollaboratorFormation } from '../../shared/entities/CollaboratorFormation';
+import { CollaboratorAcademicFormation } from '../../shared/entities/CollaboratorAcademicFormation';
+import { CollaboratorCertification } from '../../shared/entities/CollaboratorCertification';
+import { CollaboratorFormationRepository } from '../repositories/CollaboratorFormationRepository';
+import { CollaboratorAcademicFormationRepository } from '../repositories/CollaboratorAcademicFormationRepository';
+import { CollaboratorCertificationRepository } from '../repositories/CollaboratorCertificationRepository';
+import { CollaboratorProfessionalDataMap } from '../models/map/CollaboratorProfessionalDataMap';
 
 export const CollaboratorService = {
 
@@ -233,4 +246,116 @@ export const CollaboratorService = {
     const entity = await CollaboratorBankDataRepository.find(collaboratorId)
     return entity
   },
+
+  async saveContractData(dto: CollaboratorContractDataDto) {
+    const entity = CollaboratorContractDataMap.toEntity(dto) as CollaboratorContractData
+    const collaborator = await CollaboratorContractDataRepository.save(entity)
+    return collaborator
+  },
+
+  async updateContractData(dto: CollaboratorContractDataDto) {
+    const entity = CollaboratorContractDataMap.toEntity(dto) as CollaboratorContractData
+    const collaborator = await CollaboratorContractDataRepository.update(entity)
+    return collaborator
+  },
+
+  async findContractData(collaboratorId: string) {
+    const entity = await CollaboratorContractDataRepository.find(collaboratorId)
+    return entity
+  },
+
+  async saveProfessionalData(dto: CollaboratorProfessionalDataDto) {
+    const entityFormation = CollaboratorFormationMap.toEntity(dto) as CollaboratorFormation
+    const formation = await CollaboratorFormationRepository.save(entityFormation)
+
+    const entityAcademicFormation = dto.formation as CollaboratorAcademicFormation[]
+    this.deleteAcademicFormation(entityAcademicFormation, dto.collaboratorId)
+    const academicFormation = await CollaboratorAcademicFormationRepository.save(entityAcademicFormation)
+
+    const entityCertification = dto.certification as CollaboratorCertification[]
+    this.deleteCertification(entityCertification, dto.collaboratorId)
+    const certification = await CollaboratorCertificationRepository.save(entityCertification)
+
+    const professionalDataDto = CollaboratorProfessionalDataMap.toDto(formation, academicFormation, certification) as CollaboratorProfessionalDataDto
+
+    return professionalDataDto
+  },
+
+  async updateProfessionalData(dto: CollaboratorProfessionalDataDto) {
+
+    const entityFormation = CollaboratorFormationMap.toEntity(dto) as CollaboratorFormation
+    const formation = await CollaboratorFormationRepository.update(entityFormation)
+    if (dto.formation) {
+      const entityAcademicFormation = dto.formation as CollaboratorAcademicFormation[]
+      await this.deleteAcademicFormation(entityAcademicFormation, dto.collaboratorId)
+      entityAcademicFormation.map(async (data) => {
+        if(data.id) {
+          await CollaboratorAcademicFormationRepository.update(data)
+        } else {
+          await CollaboratorAcademicFormationRepository.save([data])
+        }
+      })
+    }
+    if (dto.certification) {
+      const entityCertification = dto.certification as CollaboratorCertification[]
+      this.deleteCertification(entityCertification, dto.collaboratorId)
+      entityCertification.map(async (data) => {
+        if(data.id) {
+          await CollaboratorCertificationRepository.update(data)
+        } else {
+          await CollaboratorCertificationRepository.save([data])
+        }
+      })
+    }
+    return dto
+  },
+
+  async deleteAcademicFormation(entity: CollaboratorAcademicFormation[], collaboratorId: string) {
+    const list = await this.findAcademicFormation(collaboratorId)
+    for (let index = 0; index < list.length; index++) {
+      if (entity && entity.length > 0) {
+        const validFormation = entity.find(f => f.id == list[index].id)
+        if (!validFormation) {
+          CollaboratorAcademicFormationRepository.delete(list[index].id)
+        }
+      } else {
+        CollaboratorAcademicFormationRepository.delete(list[index].id)
+      }
+    }
+    return true
+  },
+
+  async deleteCertification(entity: CollaboratorCertification[], collaboratorId: string) {
+    const list = await this.findCertification(collaboratorId) as CollaboratorCertification[]
+    for (let index = 0; index < list.length; index++) {
+      if (entity && entity.length > 0) {
+        const verifyItems = entity.find(e => e.id == list[index].id)
+        if (!verifyItems) {
+          CollaboratorCertificationRepository.delete(list[index].id)
+        }
+      } else {
+        CollaboratorCertificationRepository.delete(list[index].id)
+      }
+    }
+  },
+
+  async findProfessionalData(collaboratorId: string): Promise<CollaboratorProfessionalDataDto> {
+    const formation = await CollaboratorFormationRepository.findByCollaboratorId(collaboratorId) as CollaboratorFormation
+    const academicFormation = await CollaboratorAcademicFormationRepository.findByCollaboratorId(collaboratorId) as CollaboratorAcademicFormation[]
+    const certification = await CollaboratorCertificationRepository.findByCollaboratorId(collaboratorId) as CollaboratorCertification[]    
+
+    const professionalDataDto = CollaboratorProfessionalDataMap.toDto(formation, academicFormation, certification) as CollaboratorProfessionalDataDto
+    return professionalDataDto
+  },
+
+  async findAcademicFormation(collaboratorId: string): Promise<CollaboratorAcademicFormation[]> {
+    const entity = await CollaboratorAcademicFormationRepository.findByCollaboratorId(collaboratorId) as CollaboratorAcademicFormation[]
+    return entity
+  },
+
+  async findCertification(collaboratorId: string): Promise<CollaboratorCertification[]> {
+    const entity = await CollaboratorCertificationRepository.findByCollaboratorId(collaboratorId) as CollaboratorCertification[]
+    return entity
+  },
+
 }
