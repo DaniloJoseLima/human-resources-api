@@ -1,11 +1,11 @@
+import { CollaboratorCompanyDataDto } from './../models/dto/CollaboratorCompanyDataDto';
+import { CollaboratorTransportVouchersDto } from './../models/dto/CollaboratorTransportVouchersDto';
 import { CollaboratorProfessionalDataDto } from './../models/dto/CollaboratorProfessionalDataDto';
 import { CollaboratorContractDataDto } from './../models/dto/CollaboratorContractDataDto';
 import { CollaboratorBankDataDto } from './../models/dto/CollaboratorBankDataDto';
 import { CollaboratorDependentsDto } from './../models/dto/CollaboratorDependentsDto';
 import { CollaboratorAddressDto } from './../models/dto/CollaboratorAddressDto';
-import { CollaboratorDocumentDto } from './../models/dto/CollaboratorDocumentDto';
 
-import { Collaborator } from '../../shared/entities/Collaborator';
 import { CollaboratorDto } from '../models/dto/CollaboratorDto';
 import { CollaboratorMap } from '../models/map/CollaboratorMap';
 import { CollaboratorRepository } from '../repositories/CollaboratorRepository';
@@ -35,6 +35,14 @@ import { CollaboratorFormationRepository } from '../repositories/CollaboratorFor
 import { CollaboratorAcademicFormationRepository } from '../repositories/CollaboratorAcademicFormationRepository';
 import { CollaboratorCertificationRepository } from '../repositories/CollaboratorCertificationRepository';
 import { CollaboratorProfessionalDataMap } from '../models/map/CollaboratorProfessionalDataMap';
+import { CollaboratorTransportMap } from '../models/map/CollaboratorTransportMap';
+import { CollaboratorTransport } from '../../shared/entities/CollaboratorTransport';
+import { CollaboratorTransportRepository } from '../repositories/CollaboratorTransportRepository';
+import { CollaboratorTransportCardTypesRepository } from '../repositories/CollaboratorTransportCardTypesRepository';
+import { CollaboratorTransportVouchersMap } from '../models/map/CollaboratorTransportVouchersMap';
+import { CollaboratorTransportCardTypes } from '../../shared/entities/CollaboratorTransportCardTypes';
+import { CollaboratorCompanyDataMap } from '../models/map/CollaboratorCompanyDataMap';
+import { CollaboratorCompanyDataRepository } from '../repositories/CollaboratorCompanyDataRepository';
 
 export const CollaboratorService = {
 
@@ -76,7 +84,6 @@ export const CollaboratorService = {
         return collaboratorDocuments
       }) as CollaboratorDocuments[]
 
-      this.deleteDocuments(dto)
       const collaborator = await CollaboratorDocumentRepository.save(collaboratorDocument)
       return collaborator
     }
@@ -90,7 +97,6 @@ export const CollaboratorService = {
         return collaboratorDocuments
       }) as CollaboratorDocuments[]
 
-      this.deleteDocuments(dto)
       entity.map(async (data) => {
         await CollaboratorDocumentRepository.update(data)
       })
@@ -104,18 +110,8 @@ export const CollaboratorService = {
     return documents
   },
 
-  async deleteDocuments(collaboratorDto: CollaboratorDto) {
-    const documents = await this.findDocuments(collaboratorDto.id)
-    for (let index = 0; index < documents.length; index++) {
-      if (collaboratorDto.document && collaboratorDto.document.length > 0) {
-        const validContact = collaboratorDto.document.find(c => c.id == documents[index].id)
-        if (!validContact) {
-          CollaboratorDocumentRepository.delete(documents[index].id)
-        }
-      } else {
-        CollaboratorDocumentRepository.delete(documents[index].id)
-      }
-    }
+  async deleteDocument(id: number) {
+    await CollaboratorDocumentRepository.delete(id)
   },
 
   async saveContacts(collaboratorDto: CollaboratorDto) {
@@ -125,7 +121,6 @@ export const CollaboratorService = {
         return collaboratorContacts
       }) as CollaboratorContacts[]
 
-      this.deleteContacts(collaboratorDto)
       const collaborator = await CollaboratorContactsRepository.save(collaboratorContact)
       return collaborator
     }
@@ -139,7 +134,6 @@ export const CollaboratorService = {
         return collaboratorContacts
       }) as CollaboratorContacts[]
 
-      this.deleteContacts(collaboratorDto)
       entity.map(async (data) => {
         await CollaboratorContactsRepository.update(data)
       })
@@ -153,18 +147,8 @@ export const CollaboratorService = {
     return contacts
   },
 
-  async deleteContacts(collaboratorDto: CollaboratorDto) {
-    const contacts = await this.findContacts(collaboratorDto.id)
-    for (let index = 0; index < contacts.length; index++) {
-      if (collaboratorDto.contacts && collaboratorDto.contacts.length > 0) {
-        const validContact = collaboratorDto.contacts.find(c => c.id == contacts[index].id)
-        if (!validContact) {
-          CollaboratorContactsRepository.delete(contacts[index].id)
-        }
-      } else {
-        CollaboratorContactsRepository.delete(contacts[index].id)
-      }
-    }
+  async deleteContacts(id: number) {
+    await CollaboratorContactsRepository.delete(id)
   },
 
   async saveAddress(collaboratorAddressDto: CollaboratorAddressDto) {
@@ -189,13 +173,11 @@ export const CollaboratorService = {
 
   async saveDependents(dto: CollaboratorDependentsDto[]) {
     if (dto) {
-      let collaboratorDtoId = dto[0].collaboratorId
       const entity = dto.map((data) => {
         const collaboratorContacts = CollaboratorDependentMap.toEntity(data)
         return collaboratorContacts
       }) as CollaboratorDependents[]
 
-      this.deleteDependents(collaboratorDtoId)
       const collaborator = await CollaboratorDependentsRepository.save(entity)
       return collaborator
     }
@@ -223,11 +205,8 @@ export const CollaboratorService = {
     return entity
   },
 
-  async deleteDependents(id: string) {
-    const dependents = await this.findDependents(id)
-    for (let index = 0; index < dependents.length; index++) {
-      CollaboratorDependentsRepository.delete(dependents[index].id)
-    }
+  async deleteDependents(id: number) {
+    await CollaboratorDependentsRepository.delete(id)
   },
 
   async saveBanckData(dto: CollaboratorBankDataDto) {
@@ -269,11 +248,9 @@ export const CollaboratorService = {
     const formation = await CollaboratorFormationRepository.save(entityFormation)
 
     const entityAcademicFormation = dto.formation as CollaboratorAcademicFormation[]
-    this.deleteAcademicFormation(entityAcademicFormation, dto.collaboratorId)
     const academicFormation = await CollaboratorAcademicFormationRepository.save(entityAcademicFormation)
 
     const entityCertification = dto.certification as CollaboratorCertification[]
-    this.deleteCertification(entityCertification, dto.collaboratorId)
     const certification = await CollaboratorCertificationRepository.save(entityCertification)
 
     const professionalDataDto = CollaboratorProfessionalDataMap.toDto(formation, academicFormation, certification) as CollaboratorProfessionalDataDto
@@ -287,9 +264,8 @@ export const CollaboratorService = {
     const formation = await CollaboratorFormationRepository.update(entityFormation)
     if (dto.formation) {
       const entityAcademicFormation = dto.formation as CollaboratorAcademicFormation[]
-      await this.deleteAcademicFormation(entityAcademicFormation, dto.collaboratorId)
       entityAcademicFormation.map(async (data) => {
-        if(data.id) {
+        if (data.id) {
           await CollaboratorAcademicFormationRepository.update(data)
         } else {
           await CollaboratorAcademicFormationRepository.save([data])
@@ -298,9 +274,8 @@ export const CollaboratorService = {
     }
     if (dto.certification) {
       const entityCertification = dto.certification as CollaboratorCertification[]
-      this.deleteCertification(entityCertification, dto.collaboratorId)
       entityCertification.map(async (data) => {
-        if(data.id) {
+        if (data.id) {
           await CollaboratorCertificationRepository.update(data)
         } else {
           await CollaboratorCertificationRepository.save([data])
@@ -310,39 +285,18 @@ export const CollaboratorService = {
     return dto
   },
 
-  async deleteAcademicFormation(entity: CollaboratorAcademicFormation[], collaboratorId: string) {
-    const list = await this.findAcademicFormation(collaboratorId)
-    for (let index = 0; index < list.length; index++) {
-      if (entity && entity.length > 0) {
-        const validFormation = entity.find(f => f.id == list[index].id)
-        if (!validFormation) {
-          CollaboratorAcademicFormationRepository.delete(list[index].id)
-        }
-      } else {
-        CollaboratorAcademicFormationRepository.delete(list[index].id)
-      }
-    }
-    return true
+  async deleteFormation(id: number) {
+    await CollaboratorAcademicFormationRepository.delete(id)
   },
 
-  async deleteCertification(entity: CollaboratorCertification[], collaboratorId: string) {
-    const list = await this.findCertification(collaboratorId) as CollaboratorCertification[]
-    for (let index = 0; index < list.length; index++) {
-      if (entity && entity.length > 0) {
-        const verifyItems = entity.find(e => e.id == list[index].id)
-        if (!verifyItems) {
-          CollaboratorCertificationRepository.delete(list[index].id)
-        }
-      } else {
-        CollaboratorCertificationRepository.delete(list[index].id)
-      }
-    }
+  async deleteCertification(id: number) {
+    await CollaboratorCertificationRepository.delete(id)
   },
 
   async findProfessionalData(collaboratorId: string): Promise<CollaboratorProfessionalDataDto> {
     const formation = await CollaboratorFormationRepository.findByCollaboratorId(collaboratorId) as CollaboratorFormation
     const academicFormation = await CollaboratorAcademicFormationRepository.findByCollaboratorId(collaboratorId) as CollaboratorAcademicFormation[]
-    const certification = await CollaboratorCertificationRepository.findByCollaboratorId(collaboratorId) as CollaboratorCertification[]    
+    const certification = await CollaboratorCertificationRepository.findByCollaboratorId(collaboratorId) as CollaboratorCertification[]
 
     const professionalDataDto = CollaboratorProfessionalDataMap.toDto(formation, academicFormation, certification) as CollaboratorProfessionalDataDto
     return professionalDataDto
@@ -358,4 +312,121 @@ export const CollaboratorService = {
     return entity
   },
 
+  async saveTransportationVouchers(dto: CollaboratorTransportVouchersDto) {
+    let collaboratorTransport = [] as CollaboratorTransport[]
+
+    if (dto.typeTransportOneWay) {
+      dto.typeTransportOneWay.map((data) => {
+        const value = CollaboratorTransportMap.toEntity(data)
+        collaboratorTransport.push(value)
+        return value
+      }) as CollaboratorTransport[]
+    }
+
+    if (dto.typeTransportReturn) {
+      dto.typeTransportReturn.map((data) => {
+        const value = CollaboratorTransportMap.toEntity(data)
+        collaboratorTransport.push(value)
+        return value
+      }) as CollaboratorTransport[]
+    }
+    collaboratorTransport.map(async (data) => {
+      const collaboratorTransport = await CollaboratorTransportRepository.saveSingle(data)
+      if (data.collaboratorTransportCardTypes) {
+        data.collaboratorTransportCardTypes.map(async (cardTypes) => {
+          cardTypes.collaboratorTransportId = collaboratorTransport.id
+          await this.saveTransportationCardTypes(cardTypes)
+        })
+      }
+    })
+    return collaboratorTransport
+  },
+
+  async updateTransportationVouchers(dto: CollaboratorTransportVouchersDto) {
+    let collaboratorTransport = [] as CollaboratorTransport[]
+
+    if (dto.typeTransportOneWay) {
+      dto.typeTransportOneWay.map((data) => {
+        const value = CollaboratorTransportMap.toEntity(data)
+        collaboratorTransport.push(value)
+        return value
+      }) as CollaboratorTransport[]
+    }
+
+    if (dto.typeTransportReturn) {
+      dto.typeTransportReturn.map((data) => {
+        const value = CollaboratorTransportMap.toEntity(data)
+        collaboratorTransport.push(value)
+        return value
+      }) as CollaboratorTransport[]
+    }
+    collaboratorTransport.map(async (data) => {
+      if (data.id) {
+        const collaboratorTransport = await CollaboratorTransportRepository.update(data)
+        if (data.collaboratorTransportCardTypes) {
+          data.collaboratorTransportCardTypes.map(async (cardTypes) => {
+            cardTypes.collaboratorTransportId = collaboratorTransport.id
+            await this.saveTransportationCardTypes(cardTypes)
+          })
+        }
+      } else {
+        const collaboratorTransport = await CollaboratorTransportRepository.saveSingle(data)
+        if (data.collaboratorTransportCardTypes) {
+          data.collaboratorTransportCardTypes.map(async (cardTypes) => {
+            cardTypes.collaboratorTransportId = collaboratorTransport.id
+            await this.saveTransportationCardTypes(cardTypes)
+          })
+        }
+      }
+    })
+    return collaboratorTransport
+  },
+
+  async findTransportationVouchers(collaboratorId: string): Promise<CollaboratorTransportVouchersDto> {
+    const typeTransportOneWay = await CollaboratorTransportRepository.findTypeTransportOneWay(collaboratorId)
+    const typeTransportReturn = await CollaboratorTransportRepository.findTypeTransportReturn(collaboratorId)
+    const value = CollaboratorTransportVouchersMap.toDto(typeTransportOneWay, typeTransportReturn)
+    return value
+  },
+
+  async deleteTransportationVouchers(id: number) {
+    const cardsTypes = await this.findTransportationCardTypes(id)
+    cardsTypes.map(async (enttiy) => {
+      await this.deleteTransportationCardTypes(enttiy as CollaboratorTransportCardTypes)
+    })
+    await CollaboratorTransportRepository.delete(id)
+  },
+
+  async saveTransportationCardTypes(collaboratorTransportCardTypes: CollaboratorTransportCardTypes) {    
+    const cardsTypes = await this.findTransportationCardTypes(collaboratorTransportCardTypes.collaboratorTransportId)
+    if(cardsTypes) {
+      cardsTypes.map(async (entity) => {
+        await this.deleteTransportationCardTypes(entity)
+      })
+    }
+    return await CollaboratorTransportCardTypesRepository.saveSingle(collaboratorTransportCardTypes)
+  },
+  async findTransportationCardTypes(collaboratorTransportId: number): Promise<CollaboratorTransportCardTypes[]> {
+    return await CollaboratorTransportCardTypesRepository.find(collaboratorTransportId)
+  },
+
+  async deleteTransportationCardTypes(enttiy: CollaboratorTransportCardTypes) {
+    await CollaboratorTransportCardTypesRepository.deleteAll(enttiy as CollaboratorTransportCardTypes)
+  },
+
+  async saveCompanyData(collaboratorCompanyDataDto: CollaboratorCompanyDataDto) {
+    const entity = CollaboratorCompanyDataMap.toEntity(collaboratorCompanyDataDto)
+    const collaborator = await CollaboratorCompanyDataRepository.save(entity)
+    return collaborator
+  },
+  
+  async updateCompanyData(collaboratorCompanyDataDto: CollaboratorCompanyDataDto) {
+    const entity = CollaboratorCompanyDataMap.toEntity(collaboratorCompanyDataDto)
+    const collaborator = await CollaboratorCompanyDataRepository.update(entity)
+    return collaborator
+  },
+  
+  async findCompanyData(collaboratorId: string) {
+    return await CollaboratorCompanyDataRepository.find(collaboratorId)
+  },
 }

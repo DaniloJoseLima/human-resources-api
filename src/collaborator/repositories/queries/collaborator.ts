@@ -73,7 +73,7 @@ export function listCollaboratorCount(field: string, q: string, limitRegisters: 
   return `${query} limit ${limitRegisters}`
 }
 
-export function findCollaborator(id: string) {  
+export function findCollaborator(id: string) {
   return `${queryBase()} and col.id = '${id}' `
 }
 
@@ -143,5 +143,61 @@ export function registrationVerification(id: string) {
     left join collaborator_transport ct on (ct.collaborator_id = c.id)
     left join collaborator_company_data ccd on (ccd.collaborator_id = c.id)
     where c.id = '${id}';
+  `
+}
+
+export function findTypeTransportOneWay(collaboratorId: string) {
+  return `
+  SELECT DISTINCT
+    JSON_OBJECT(
+      'id', ct.id,
+      'collaboratorId', ct.collaborator_id,
+      'type', ct.type,
+      'transportTypes', ct.transport_type_id,
+      'company', ct.company,
+      'line', ct.line,
+      'quantity', ct.quantity,
+      'value', ct.value,
+      'collaboratorTransportCardTypes', COALESCE((
+        SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'collaboratorId', ctct.collaborator_transport_id,
+            'transportCardsTypesId', ctct.transport_cards_types_id        
+          )
+        )
+        FROM collaborator_transport_cards_types AS ctct
+        WHERE ctct.collaborator_transport_id = ct.id
+      ), JSON_ARRAY())     
+    ) AS typeTransportOneWay
+  FROM collaborator_transport ct
+  WHERE ct.collaborator_id = '${collaboratorId}' AND ct.type = 'going'
+  `
+}
+
+export function findTypeTransportReturn(collaboratorId: string) {
+  return `
+  SELECT DISTINCT
+    JSON_OBJECT(
+      'id', ct.id,
+      'collaboratorId', ct.collaborator_id,
+      'type', ct.type,
+      'transportTypes', ct.transport_type_id,
+      'company', ct.company,
+      'line', ct.line,
+      'quantity', ct.quantity,
+      'value', ct.value,
+      'collaboratorTransportCardTypes', COALESCE((
+        SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'collaboratorId', ctct.collaborator_transport_id,
+            'transportCardsTypesId', ctct.transport_cards_types_id        
+          )
+        )
+        FROM collaborator_transport_cards_types AS ctct
+        WHERE ctct.collaborator_transport_id = ct.id
+      ), JSON_ARRAY())     
+    ) AS typeTransportReturn
+  FROM collaborator_transport ct
+  WHERE ct.collaborator_id = '${collaboratorId}' AND ct.type = 'return'
   `
 }

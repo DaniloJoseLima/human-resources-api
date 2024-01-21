@@ -7,6 +7,8 @@ import { CollaboratorDependentsDto } from '../models/dto/CollaboratorDependentsD
 import { CollaboratorBankDataDto } from '../models/dto/CollaboratorBankDataDto';
 import { CollaboratorContractDataDto } from '../models/dto/CollaboratorContractDataDto';
 import { CollaboratorProfessionalDataDto } from '../models/dto/CollaboratorProfessionalDataDto';
+import { CollaboratorTransportVouchersDto } from '../models/dto/CollaboratorTransportVouchersDto';
+import { CollaboratorCompanyDataDto } from '../models/dto/CollaboratorCompanyDataDto';
 
 export class CollaboratorController {
 
@@ -53,6 +55,12 @@ export class CollaboratorController {
     return res.status(201).json(user)
   }
 
+  async deleteDocument(req: Request, res: Response) {
+    const { id } = req.params as any
+    const data = await CollaboratorService.deleteDocument(id)
+    return res.status(200).json(data)
+  }
+
   async findDocuments(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.findDocuments(id)
@@ -69,6 +77,12 @@ export class CollaboratorController {
     const dto: CollaboratorDto = req.body as CollaboratorDto
     const entity = await CollaboratorService.updateContacts(dto)
     return res.status(201).json(entity)
+  }
+  
+  async deleteContacts(req: Request, res: Response) {
+    const { id } = req.params as any
+    const data = await CollaboratorService.deleteContacts(id)
+    return res.status(200).json(data)
   }
 
   async findContacts(req: Request, res: Response) {
@@ -105,6 +119,12 @@ export class CollaboratorController {
     const dto: CollaboratorDependentsDto[] = req.body as CollaboratorDependentsDto[]
     const data = await CollaboratorService.updateDependents(dto)
     return res.status(201).json(data)
+  }
+
+  async deleteDependents(req: Request, res: Response) {
+    const { id } = req.params as any
+    const data = await CollaboratorService.deleteDependents(id)
+    return res.status(200).json(data)
   }
 
   async findDependents(req: Request, res: Response) {
@@ -148,7 +168,6 @@ export class CollaboratorController {
     const data = await CollaboratorService.findContractData(id)
     return res.status(200).json(data)
   }
-  
 
   async saveProfessionalData(req: Request, res: Response) {
     const dto: CollaboratorProfessionalDataDto = req.body as CollaboratorProfessionalDataDto
@@ -161,10 +180,65 @@ export class CollaboratorController {
     const data = await CollaboratorService.updateProfessionalData(dto)
     return res.status(201).json(data)
   }
+  
+  async deleteFormation(req: Request, res: Response) {
+    const { id } = req.params as any
+    const data = await CollaboratorService.deleteFormation(id)
+    return res.status(200).json(data)
+  }
+  
+  async deleteCertification(req: Request, res: Response) {
+    const { id } = req.params as any
+    const data = await CollaboratorService.deleteCertification(id)
+    return res.status(200).json(data)
+  }
 
   async findProfessionalData(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.findProfessionalData(id)
     return res.status(200).json(data)
   }
+
+  async saveTransportationVouchers(req: Request, res: Response) {
+    const dto: CollaboratorTransportVouchersDto = req.body as CollaboratorTransportVouchersDto
+    const data = await CollaboratorService.saveTransportationVouchers(dto)
+    return res.status(201).json(data)
+  }
+
+  async updateTransportationVouchers(req: Request, res: Response) {
+    const dto: CollaboratorTransportVouchersDto = req.body as CollaboratorTransportVouchersDto
+    const data = await CollaboratorService.updateTransportationVouchers(dto)
+    return res.status(201).json(data)
+  }
+  
+  async deleteTransportationVouchers(req: Request, res: Response) {
+    const { id } = req.params as any
+    const data = await CollaboratorService.deleteTransportationVouchers(id)
+    return res.status(200).json(data)
+  }
+  
+  async findTransportationVouchers(req: Request, res: Response) {
+    const { id } = req.params
+    const data = await CollaboratorService.findTransportationVouchers(id)
+    return res.status(200).json(data)
+  }
+
+  async saveCompanyData(req: Request, res: Response) {
+    const dto: CollaboratorCompanyDataDto = req.body as CollaboratorCompanyDataDto
+    const data = await CollaboratorService.saveCompanyData(dto)
+    return res.status(201).json(data)
+  }
+
+  async updateCompanyData(req: Request, res: Response) {
+    const dto: CollaboratorCompanyDataDto = req.body as CollaboratorCompanyDataDto
+    const data = await CollaboratorService.updateCompanyData(dto)
+    return res.status(201).json(data)
+  }
+  
+  async findCompanyData(req: Request, res: Response) {
+    const { id } = req.params
+    const data = await CollaboratorService.findCompanyData(id)
+    return res.status(200).json(data)
+  }
+
 }
