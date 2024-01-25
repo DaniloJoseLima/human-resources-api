@@ -103,7 +103,7 @@ CREATE TABLE transport_cards_types (
 
 CREATE TABLE collaborators (
   id VARCHAR(255) NOT NULL,
-  contract_type ENUM('pj', 'clt') NOT NULL,
+  contract_type ENUM('pj', 'clt', 'internship', 'cooperated') NOT NULL,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL,
   birth_date DATETIME NOT NULL,

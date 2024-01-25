@@ -201,3 +201,40 @@ export function findTypeTransportReturn(collaboratorId: string) {
   WHERE ct.collaborator_id = '${collaboratorId}' AND ct.type = 'return'
   `
 }
+
+export function totalType() {
+  return `
+  SELECT
+    COUNT(CASE WHEN contract_type = 'clt' THEN 1 ELSE NULL END) AS countClt,
+    COUNT(CASE WHEN contract_type = 'pj' THEN 1 ELSE NULL END) AS countPj,
+    COUNT(CASE WHEN contract_type = 'internship' THEN 1 ELSE NULL END) AS countInternship,
+    COUNT(CASE WHEN contract_type = 'cooperated' THEN 1 ELSE NULL END) AS countCooperated
+  FROM collaborators
+  `
+}
+
+export function monthBirthdayList() {
+  return `
+    SELECT
+      id AS id,
+      name AS name,
+        email AS email,
+      DATE_FORMAT(birth_date, '%d/%m/%Y') AS birthDate
+    FROM collaborators
+    WHERE MONTH(birth_date) = MONTH(NOW());
+  `
+}
+export function companyBirthdayList() {
+  return `
+    SELECT
+      c.id AS id,
+      c.name AS name,
+      c.email AS email,
+      DATE_FORMAT(ccd.start, '%d/%m/%Y') AS birthDate
+    FROM collaborators c
+    INNER JOIN collaborator_contract_data ccd ON (c.id = ccd.collaborator_id)
+    WHERE
+      MONTH(ccd.start) = MONTH(NOW())
+      AND TIMESTAMPDIFF(YEAR, ccd.start, NOW()) >= 1;
+  `
+}

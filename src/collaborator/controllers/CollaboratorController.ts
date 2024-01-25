@@ -240,5 +240,20 @@ export class CollaboratorController {
     const data = await CollaboratorService.findCompanyData(id)
     return res.status(200).json(data)
   }
+  
+  async totalType(req: Request, res: Response) {
+    const data = await CollaboratorService.totalType()
+    return res.status(200).json(data)
+  }
+
+  async monthBirthdayList(req: Request, res: Response) {
+    const data = await CollaboratorService.monthBirthdayList()
+    return res.status(200).json(data)
+  }
+
+  async companyBirthdayList(req: Request, res: Response) {
+    const data = await CollaboratorService.companyBirthdayList()
+    return res.status(200).json(data)
+  }
 
 }

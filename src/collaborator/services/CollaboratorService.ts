@@ -429,4 +429,16 @@ export const CollaboratorService = {
   async findCompanyData(collaboratorId: string) {
     return await CollaboratorCompanyDataRepository.find(collaboratorId)
   },
+
+  async totalType() {
+    return await CollaboratorRepository.totalType()
+  },
+
+  async monthBirthdayList() {
+    return await CollaboratorRepository.monthBirthdayList()
+  },
+
+  async companyBirthdayList() {
+    return await CollaboratorRepository.companyBirthdayList()
+  },
 }

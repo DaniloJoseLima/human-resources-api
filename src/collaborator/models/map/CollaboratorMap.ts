@@ -23,12 +23,16 @@ export class CollaboratorMap  {
     }
   }
 
-  public static toDto(collaborator: Collaborator): CollaboratorDto {
+  public static toDto(collaborator: Collaborator): any {
 
-    const maritalStatus = collaborator.maritalStatus ? JSON.parse(collaborator.maritalStatus) : undefined
-    const ethnicity = collaborator.ethnicity ? JSON.parse(collaborator.ethnicity) : undefined
-    const gender = collaborator.gender ? JSON.parse(collaborator.gender) : undefined
-    const contract = collaborator.contract ? JSON.parse(collaborator.contract) : undefined
+    if(!collaborator) {
+      return null
+    }
+
+    const maritalStatus = collaborator && collaborator.maritalStatus ? JSON.parse(collaborator.maritalStatus) : undefined
+    const ethnicity = collaborator && collaborator.ethnicity ? JSON.parse(collaborator.ethnicity) : undefined
+    const gender = collaborator && collaborator.gender ? JSON.parse(collaborator.gender) : undefined
+    const contract = collaborator && collaborator.contract ? JSON.parse(collaborator.contract) : undefined
 
     return {
       id: collaborator.id,

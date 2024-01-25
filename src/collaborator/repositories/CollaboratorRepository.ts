@@ -3,7 +3,7 @@ import { BadRequestError } from '../../shared/helpers/api-erros'
 
 import { CollaboratorDataSource } from "../dataSource/CollaboratorDataSource"
 
-import { listCollaborator, listCollaboratorCount, findCollaborator, registrationVerification } from './queries/collaborator'
+import { listCollaborator, listCollaboratorCount, findCollaborator, registrationVerification, totalType, monthBirthdayList, companyBirthdayList } from './queries/collaborator'
 
 export const CollaboratorRepository = {
 
@@ -44,6 +44,7 @@ export const CollaboratorRepository = {
 
   async list(field: string, q: string, pageNumber: number) {
     const limitRegisters = 10;
+    pageNumber = pageNumber * limitRegisters;
     const [list, count] = await Promise.all([
       CollaboratorDataSource.query(listCollaborator(field, q, pageNumber, limitRegisters)),
       CollaboratorDataSource.query(listCollaboratorCount(field, q, limitRegisters))
@@ -66,5 +67,25 @@ export const CollaboratorRepository = {
     ])
     return data[0]
   },
-
+  
+  async totalType() {
+    const [data] = await Promise.all([
+      CollaboratorDataSource.query(totalType()),
+    ])
+    return data[0]
+  },
+  
+  async monthBirthdayList() {
+    const [data] = await Promise.all([
+      CollaboratorDataSource.query(monthBirthdayList()),
+    ])
+    return data
+  },
+  
+  async companyBirthdayList() {
+    const [data] = await Promise.all([
+      CollaboratorDataSource.query(companyBirthdayList()),
+    ])
+    return data
+  },
 }
