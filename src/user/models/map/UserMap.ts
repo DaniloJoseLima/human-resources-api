@@ -25,9 +25,10 @@ export class UserMap  {
       id: user.id,
       name: user.name,
       roleId: user.roleId,
+      roleName: user.roleName,
       email: user.email,
       permissions: permissions,
-      roles: roles
+      roles: roles,
     }
   }
 }

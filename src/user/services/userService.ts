@@ -15,6 +15,11 @@ export const UserService = {
     return data
   },
 
+  async updatePassoword(id: string, password: string) {
+    const user = await UserRepository.updatePassoword(id, password)
+    return user
+  },
+
   async findAll(field: string, q: string, pageNumber: number) {
     const data = await UserRepository.findAll(field, q, pageNumber) as any
     data.list = data.list.map((entity: any) => {

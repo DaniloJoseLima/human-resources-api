@@ -5,5 +5,7 @@ export interface UserDto {
   roleId: number;
   name: string;
   email: string;
+  password?: string;
+  isGoogle?: boolean;
   permissions: Array<Permissions>;
 }

@@ -45,6 +45,7 @@ export function findById(id: string) {
     SELECT 
       u.id id,
       u.role_id roleId,
+      r.name roleName,
       u.name name,
       u.email,
       COALESCE((

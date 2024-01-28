@@ -8,6 +8,8 @@ userRoutes.post('/create', new UserController().create)
 
 userRoutes.put('/', new UserController().update)
 
+userRoutes.put('/update-passoword', new UserController().updatePassoword)
+
 userRoutes.get('', authMiddleware, new UserController().findAll)
 
 userRoutes.get('/:id', authMiddleware, new UserController().find)

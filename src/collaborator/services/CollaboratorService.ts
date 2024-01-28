@@ -246,12 +246,17 @@ export const CollaboratorService = {
   async saveProfessionalData(dto: CollaboratorProfessionalDataDto) {
     const entityFormation = CollaboratorFormationMap.toEntity(dto) as CollaboratorFormation
     const formation = await CollaboratorFormationRepository.save(entityFormation)
+    let academicFormation: CollaboratorAcademicFormation[] = []
+    let certification: CollaboratorCertification[] = []
+    if(dto.formation) {
+      const entityAcademicFormation = dto.formation as CollaboratorAcademicFormation[]
+      academicFormation = await CollaboratorAcademicFormationRepository.save(entityAcademicFormation)
+    }
 
-    const entityAcademicFormation = dto.formation as CollaboratorAcademicFormation[]
-    const academicFormation = await CollaboratorAcademicFormationRepository.save(entityAcademicFormation)
-
-    const entityCertification = dto.certification as CollaboratorCertification[]
-    const certification = await CollaboratorCertificationRepository.save(entityCertification)
+    if(dto.certification) {
+      const entityCertification = dto.certification as CollaboratorCertification[]
+      certification = await CollaboratorCertificationRepository.save(entityCertification)
+    }
 
     const professionalDataDto = CollaboratorProfessionalDataMap.toDto(formation, academicFormation, certification) as CollaboratorProfessionalDataDto
 

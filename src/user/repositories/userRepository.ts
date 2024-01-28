@@ -49,6 +49,24 @@ export const UserRepository = {
     return user
   },
 
+  async updatePassoword(id: string, password: string) {
+    
+    let userExists = await UserDataSource.findOneBy({ id: id }) as User
+    if (!userExists) {
+      throw new BadRequestError('User already exists')
+    }
+    
+    const hashPassword = await bcrypt.hash(password, 10)
+
+    userExists = {
+      ...userExists,
+      password: hashPassword,
+    }
+
+    const user = await UserDataSource.save(userExists)
+    return user
+  },
+
   async findAll(field: string, q: string, pageNumber: number) {
     const limitRegisters = 10;
     const [list, count] = await Promise.all([

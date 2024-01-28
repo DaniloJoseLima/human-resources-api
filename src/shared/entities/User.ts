@@ -19,5 +19,6 @@ export class User extends BaseEntity {
   
   permissions?: any;
   roles?: any;
+  roleName?: string;
 
 }
