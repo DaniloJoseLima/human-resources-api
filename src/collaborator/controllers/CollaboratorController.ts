@@ -31,6 +31,12 @@ export class CollaboratorController {
     return res.status(201).json(user)
   }
 
+  async listExportToExcel(req: Request, res: Response) {
+    const { field, q } = req.query as { field: string, q: string, page: string }
+    const user = await CollaboratorService.listExportToExcel(field, q)
+    return res.status(201).json(user)
+  }
+
   async find(req: Request, res: Response) {
     const { id } = req.params
     const data = await CollaboratorService.find(id)

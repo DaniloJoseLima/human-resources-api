@@ -37,7 +37,7 @@ function queryBase() {
   left join ethnicity_types et on (et.id = col.ethnicity_type_id)
   left join gender_types gt on (gt.id = col.gender_type_id)
   left join collaborator_contract_data ccd on (ccd.collaborator_id = col.id)
-  where col.created_at is not null `
+  where 1=1 `
 }
 
 export function listCollaborator(field: string, q: string, pageNumber: number, limitRegisters: number) {
@@ -50,6 +50,18 @@ export function listCollaborator(field: string, q: string, pageNumber: number, l
     filterCondition = ` and ccd.occupation like '%${q}%' `
   }
   return `${queryBase()} ${filterCondition} LIMIT ${limitRegisters} offset ${pageNumber}`
+}
+
+export function listExportToExcelCollaborator(field: string, q: string) {
+  let filterCondition = ''
+  if (field === 'name') {
+    filterCondition = ` and col.name like '%${q}%' `
+  } else if (field === 'contractStart') {
+    filterCondition = ` and col.contract_type like '%${q}%' `
+  } else if (field === 'contractOccupation') {
+    filterCondition = ` and ccd.occupation like '%${q}%' `
+  }
+  return `${queryBase()} ${filterCondition}`
 }
 
 export function listCollaboratorCount(field: string, q: string, limitRegisters: number) {

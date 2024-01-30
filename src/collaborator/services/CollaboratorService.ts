@@ -66,6 +66,14 @@ export const CollaboratorService = {
     return data
   },
 
+  async listExportToExcel(field: string, q: string) {
+    let data = await CollaboratorRepository.listExportToExcel(field, q)
+    data = data.map((entity: any) => {
+      return CollaboratorMap.toDto(entity)
+    })
+    return data
+  },
+
   async find(id: string) {
     const data = await CollaboratorRepository.find(id) as any
     const dto = CollaboratorMap.toDto(data)

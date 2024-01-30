@@ -3,7 +3,7 @@ import { BadRequestError } from '../../shared/helpers/api-erros'
 
 import { CollaboratorDataSource } from "../dataSource/CollaboratorDataSource"
 
-import { listCollaborator, listCollaboratorCount, findCollaborator, registrationVerification, totalType, monthBirthdayList, companyBirthdayList } from './queries/collaborator'
+import { listCollaborator, listCollaboratorCount, findCollaborator, registrationVerification, totalType, monthBirthdayList, companyBirthdayList, listExportToExcelCollaborator } from './queries/collaborator'
 
 export const CollaboratorRepository = {
 
@@ -52,6 +52,13 @@ export const CollaboratorRepository = {
     const { totalRegisters } = count[0]
     const pages = Math.ceil(totalRegisters / limitRegisters)
     return { totalRegisters, pages, list }
+  },
+
+  async listExportToExcel(field: string, q: string) {
+    const [list] = await Promise.all([
+      CollaboratorDataSource.query(listExportToExcelCollaborator(field, q)),
+    ])
+    return list
   },
 
   async find(id: string) {
