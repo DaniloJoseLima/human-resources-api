@@ -1,3 +1,6 @@
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from '../swaggerConfig'; // ajuste o caminho conforme necessário
+
 import 'express-async-errors'
 import { AppDataSource } from './data-source'
 
@@ -24,7 +27,8 @@ AppDataSource.initialize().then(() => {
   app.use(cors(corsOptions));
   app.use(express.json());
 	app.use(errorMiddleware)
-  
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   app.use(`${baseAPI}/ref-data`, refDataRoutes)
   app.use(`${baseAPI}/auth`, authRoutes)
   app.use(`${baseAPI}/user`, userRoutes)
