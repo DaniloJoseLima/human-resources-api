@@ -1,5 +1,5 @@
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from '../swaggerConfig'; // ajuste o caminho conforme necessário
+import swaggerSpec from '../swaggerConfig';
 
 import 'express-async-errors'
 import { AppDataSource } from './data-source'
@@ -18,9 +18,10 @@ const app = express();
 AppDataSource.initialize().then(() => {
 
   const baseAPI = '/v1/api'
+  const allowedOrigins = [process.env.PORTAL_URL];
 
   const corsOptions = {
-    origin: '*', // Arrumar URL padrão cors
+    origin: allowedOrigins,
     optionsSuccessStatus: 200
   }
 

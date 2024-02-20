@@ -1,6 +1,5 @@
 import { BaseEntity } from './BaseEntity';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import { Permissions } from './Permissions';
+import { Column, Entity } from 'typeorm'
 
 @Entity('users')
 export class User extends BaseEntity {

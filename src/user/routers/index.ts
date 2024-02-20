@@ -29,7 +29,6 @@ const userRoutes = Router()
  *         description: Successful response
  */
 userRoutes.post('/create', new UserController().create)
-
 /**
  * @swagger
  * /user:
@@ -59,11 +58,59 @@ userRoutes.post('/create', new UserController().create)
  *         description: Successful response
  */
 userRoutes.put('/', new UserController().update)
-
+/**
+ * @swagger
+ * /user/update-passoword:
+ *   put:
+ *     tags: [Users]
+ *     summary: Update passoword user
+ *     description: Endpoint to update passoword user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Successful response
+ */
 userRoutes.put('/update-passoword', new UserController().updatePassoword)
-
+/**
+ * @swagger
+ * /user:
+ *   get:
+ *     tags: [Users]
+ *     summary: Find users
+ *     description: Endpoint to find users
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
 userRoutes.get('', authMiddleware, new UserController().findAll)
-
+/**
+ * @swagger
+ * /user/:id:
+ *   get:
+ *     tags: [Users]
+ *     summary: Find users
+ *     description: Endpoint to find users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the users
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
 userRoutes.get('/:id', authMiddleware, new UserController().find)
 
 export default userRoutes
