@@ -8,7 +8,8 @@
     "dev": "ts-node-dev --inspect --files src/api.ts --respawn --transpile-only swagger.ts",
     "test": "jest --passWithNoTests",
     "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./scripts/migrations/default",
-    "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run"
+    "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
+    "tsc": "tsc --target ES5 --experimentalDecorators --emitDecoratorMetadata"
   },
   "author": "",
   "license": "ISC",
