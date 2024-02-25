@@ -2,6 +2,16 @@ CREATE SCHEMA human_resources;
 
 USE human_resources;
 
+CREATE TABLE roles (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL,
+  description varchar(255) NOT NULL,
+  deprecated tinyint(1) NOT NULL DEFAULT '0',
+  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE users (
   id VARCHAR(255) NOT NULL,
   role_id INT(11) NOT NULL DEFAULT 1,
@@ -18,15 +28,6 @@ CREATE TABLE users (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-CREATE TABLE roles (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  name varchar(100) NOT NULL,
-  description varchar(255) NOT NULL,
-  deprecated tinyint(1) NOT NULL DEFAULT '0',
-  created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE permissions (
   id INT(11) NOT NULL AUTO_INCREMENT,
@@ -277,7 +278,7 @@ CREATE TABLE collaborator_bank_data (
   PRIMARY KEY (id),
   KEY fk_bank_data_collaborators (collaborator_id),
   CONSTRAINT fk_bank_data_collaborators FOREIGN KEY (collaborator_id) REFERENCES collaborators (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 CREATE TABLE collaborator_contract_data (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -309,7 +310,7 @@ CREATE TABLE collaborator_formation (
   KEY fk_formation_schooling_types (schooling_type_id),
   CONSTRAINT fk_formation_collaborators FOREIGN KEY (collaborator_id) REFERENCES collaborators (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT fk_formation_schooling_types FOREIGN KEY (schooling_type_id) REFERENCES schooling_types (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 CREATE TABLE collaborator_academic_formation (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
