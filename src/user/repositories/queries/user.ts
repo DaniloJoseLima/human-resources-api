@@ -14,7 +14,6 @@ export function listAll(field: string, q: string, pageNumber: number, limitRegis
       u.email,
       JSON_OBJECT(
         'id', r.id,
-        'name', r.name,
         'nameKey', r.name_key
       ) as roles
     FROM users u
@@ -45,7 +44,7 @@ export function findById(id: string) {
     SELECT 
       u.id id,
       u.role_id roleId,
-      r.name roleName,
+      r.name_key roleName,
       u.name name,
       u.email,
       COALESCE((
@@ -62,7 +61,6 @@ export function findById(id: string) {
       ), JSON_ARRAY()) as permissions,
       JSON_OBJECT(
         'id', r.id,
-        'name', r.name,
         'nameKey', r.name_key
       ) as roles
     FROM users u
