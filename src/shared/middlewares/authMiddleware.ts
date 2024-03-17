@@ -14,7 +14,7 @@ export const authMiddleware = async (
 ) => {
   const authHeaders = req.headers.authorization;
 
-  console.log("1 >>>> ", authHeaders)
+  console.log("1 >>>> ", req.headers)
   if (!authHeaders) {
     throw new UnauthorizedError('Não autorizado')
   }
