@@ -1283,7 +1283,7 @@ collaboratorRoutes.get('/:id/company-data', authMiddleware, new CollaboratorCont
  *       200:
  *         description: Successful response
  */
-collaboratorRoutes.get('/total/type', authMiddleware, new CollaboratorController().totalType)
+collaboratorRoutes.get('/total/type', new CollaboratorController().totalType)
 /**
  * @swagger
  * /collaborator/month/birthday:
@@ -1295,7 +1295,7 @@ collaboratorRoutes.get('/total/type', authMiddleware, new CollaboratorController
  *       200:
  *         description: Successful response
  */
-collaboratorRoutes.get('/month/birthday', authMiddleware, new CollaboratorController().monthBirthdayList)
+collaboratorRoutes.get('/month/birthday', new CollaboratorController().monthBirthdayList)
 /**
  * @swagger
  * /collaborator/month/company:
@@ -1307,6 +1307,6 @@ collaboratorRoutes.get('/month/birthday', authMiddleware, new CollaboratorContro
  *       200:
  *         description: Successful response
  */
-collaboratorRoutes.get('/month/company', authMiddleware, new CollaboratorController().companyBirthdayList)
+collaboratorRoutes.get('/month/company', new CollaboratorController().companyBirthdayList)
 
 export default collaboratorRoutes
