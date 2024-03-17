@@ -14,20 +14,16 @@ export const authMiddleware = async (
 ) => {
   const authHeaders = req.headers.authorization;
 
-  console.log("1 >>>> ", req.headers)
   if (!authHeaders) {
     throw new UnauthorizedError('Não autorizado')
   }
 
   try {
     const token = authHeaders.split(' ')[1]
-    console.log("2 >>>> ", token)
 
     const { id } = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayload
-    console.log("3 >>>> ", id)
 
     const user = await UserRepository.find(id)
-    console.log("4 >>>> ", user)
 
     if (!user) {
       throw new UnauthorizedError('Não autorizado')
