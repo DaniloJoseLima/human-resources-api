@@ -10,6 +10,7 @@
     "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./scripts/migrations/default",
     "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
     "start:prod": "pm2 start dist/src/api.js --name=human-resources-api-prod",
+    "stop:prod": "pm2 stop human-resources-api-prod && pm2 delete human-resources-api-prod",
     "tsc": "tsc --target ES5 --experimentalDecorators --emitDecoratorMetadata"
   },
   "author": "",
