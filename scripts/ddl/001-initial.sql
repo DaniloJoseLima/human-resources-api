@@ -5,7 +5,7 @@ USE human_resources;
 CREATE TABLE roles (
   id int(11) NOT NULL AUTO_INCREMENT,
   name_key varchar(100) NOT NULL,
-  description varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
   deprecated tinyint(1) NOT NULL DEFAULT '0',
   created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),

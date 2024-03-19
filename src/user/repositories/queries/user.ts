@@ -14,7 +14,8 @@ export function listAll(field: string, q: string, pageNumber: number, limitRegis
       u.email,
       JSON_OBJECT(
         'id', r.id,
-        'nameKey', r.name_key
+        'nameKey', r.name_key,
+        'name', r.name
       ) as roles
     FROM users u
     INNER JOIN roles r ON (r.id = u.role_id)
@@ -44,7 +45,7 @@ export function findById(id: string) {
     SELECT 
       u.id id,
       u.role_id roleId,
-      r.name_key roleName,
+      r.name roleName,
       u.name name,
       u.email,
       COALESCE((
@@ -61,7 +62,8 @@ export function findById(id: string) {
       ), JSON_ARRAY()) as permissions,
       JSON_OBJECT(
         'id', r.id,
-        'nameKey', r.name_key
+        'nameKey', r.name_key,
+        'name', r.name
       ) as roles
     FROM users u
     INNER JOIN roles r ON (r.id = u.role_id)

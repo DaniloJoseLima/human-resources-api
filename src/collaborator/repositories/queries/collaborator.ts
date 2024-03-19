@@ -132,17 +132,17 @@ export function registrationVerification(id: string) {
         when caf.id is not null
             then true
             else false
-      end ProfessionalData,
+      end professionalData,
       case
         when ct.id is not null
             then true
             else false
-      end TransportationVouchers,
+      end transportationVouchers,
       case
         when ccd.id is not null
             then true
             else false
-      end CompanyData
+      end companyData
     from 
       collaborators c
     left join collaborator_documents cd on (cd.collaborator_id = c.id)
