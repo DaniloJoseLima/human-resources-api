@@ -18,14 +18,8 @@ const app = express();
 AppDataSource.initialize().then(() => {
 
   const baseAPI = '/v1/api'
-  const allowedOrigins = [process.env.PORTAL_URL];
 
-  const corsOptions = {
-    origin: allowedOrigins,
-    optionsSuccessStatus: 200
-  }
-
-  app.use(cors(corsOptions));
+  app.use(cors());
   app.use(express.json());
 	app.use(errorMiddleware)
 
